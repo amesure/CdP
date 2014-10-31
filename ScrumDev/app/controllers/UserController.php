@@ -105,6 +105,17 @@ class UserController extends ControllerBase
             ));
         }
 
+        if($this->request->getPost("login")=="" 
+            || $this->request->getPost("email", "email")==""
+            || $this->request->getPost("password")=="") {
+
+            $this->flash->error("Aucun champs ne peut être vide.");
+            return $this->dispatcher->forward(array(
+                "controller" => "user",
+                "action" => "new"
+            ));
+        }
+        echo "toto";
         $user = new User();
 
         $user->login = $this->request->getPost("login");
