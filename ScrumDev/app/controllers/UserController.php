@@ -19,7 +19,7 @@ class UserController extends ControllerBase
      */
     public function searchAction()
     {
-        echo "toto";
+  
         $numberPage = 1;
         if ($this->request->isPost()) {
             $query = Criteria::fromInput($this->di, "User", $_POST);
@@ -105,17 +105,6 @@ class UserController extends ControllerBase
             ));
         }
 
-        if($this->request->getPost("login")=="" 
-            || $this->request->getPost("email", "email")==""
-            || $this->request->getPost("password")=="") {
-
-            $this->flash->error("Aucun champs ne peut être vide.");
-            return $this->dispatcher->forward(array(
-                "controller" => "user",
-                "action" => "new"
-            ));
-        }
-        echo "toto";
         $user = new User();
 
         $user->login = $this->request->getPost("login");
@@ -134,7 +123,7 @@ class UserController extends ControllerBase
             ));
         }
 
-        $this->flash->success("user was created successfully");
+        $this->flash->success("Votre inscription s'est déroulée correctement");
 
         return $this->dispatcher->forward(array(
             "controller" => "user",
@@ -161,7 +150,7 @@ class UserController extends ControllerBase
 
         $user = User::findFirstByid_user($id_user);
         if (!$user) {
-            $this->flash->error("user does not exist " . $id_user);
+            $this->flash->error("Cet utilisateur n'existe pas " . $id_user);
 
             return $this->dispatcher->forward(array(
                 "controller" => "user",
@@ -252,7 +241,7 @@ class UserController extends ControllerBase
             ));
 
             if ($user === false){
-                $this->flash->error("Incorrect credentials");
+                $this->flash->error("Cet utilisateur n'existe pas.");
                 return $this->dispatcher->forward(array(
                     'controller' => 'user',
                     'action' => 'index'
