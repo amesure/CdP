@@ -13,6 +13,20 @@ class ProjectController extends ControllerBase
     {
         $this->persistent->parameters = null;
     }
+	
+	/**
+	* Show action
+	*/
+	public function showAction()
+	{
+	$id_user=$this->session->get("auth");
+	$id_project=Member::findFirstByid_user($id_user);
+	$project=Project::findFirstByid_project($id_project);
+	$this->view->setVars(array(
+            'title' => $project->title,
+            'content' => $project->content
+        ));
+	}
 
     /**
      * Searches for project
@@ -223,53 +237,5 @@ class ProjectController extends ControllerBase
         ));
     }
 
-    /**
-     * Login a project
-     *
-     */
-    public function titleAction()
-    {
-
-        if ($this->request->isPost()) {
-
-            $project = Project::findFirst(array(
-                'title = :title: and access = :access:',
-                'bind' => array(
-                    'title' => $this->request->getPost("title"),
-                    'access' => $this->request->getPost("access")
-                )
-            ));
-
-            if ($project === false){
-                $this->flash->error("Cet utilisateur n'existe pas.");
-                return $this->dispatcher->forward(array(
-                    'controller' => 'project',
-                    'action' => 'index'
-                ));
-            }
-
-            $this->session->set('auth', $project->id);
-
-            $this->flash->success("You've been successfully logged in");
-        }
-
-        return $this->dispatcher->forward(array(
-            'controller' => 'project',
-            'action' => 'index'
-        ));
-    }
-
-    /**
-     * Logout a project
-     *
-     */
-    public function logoutAction()
-    {
-        $this->session->remove('auth');
-        return $this->dispatcher->forward(array(
-            'controller' => 'index',
-            'action' => 'index'
-        ));
-    }
 
 }
