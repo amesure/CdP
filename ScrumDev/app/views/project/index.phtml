@@ -14,18 +14,18 @@
 <table>
     <tr>
         <td align="right">
-            <label for="login">Titre</label>
+            <label for="login">Id</label>
         </td>
         <td align="left">
-            <?php echo $title ?>
+            <?php echo $this->tag->textField(array("login", "size" => 20)) ?>
         </td>
     </tr>
     <tr>
         <td align="right">
-            <label for="password">Description </label>
+            <label for="password">Mot de passe: </label>
         </td>
         <td align="left">
-            <?php echo $content ?>
+            <?php echo $this->tag->passwordField(array("password", "size" => 30)) ?>
         </td>
     </tr>
 
