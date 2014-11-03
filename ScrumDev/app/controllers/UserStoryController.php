@@ -42,13 +42,12 @@ class UserStoryController extends ControllerBase
                 ));
             }
 
-            $this->view->id_us = $us->id_us;
+            $this->view->setVar("id", $us->id_us);
 
-            $this->tag->setDefault("id_us", $us->id_us);
+            $this->tag->setDefault("id", $us->id_us);
             $this->tag->setDefault("title", $us->title);
             $this->tag->setDefault("content", $us->content);
             $this->tag->setDefault("cost", $us->cost);
-            
         }
     }
 
@@ -103,10 +102,13 @@ class UserStoryController extends ControllerBase
                 "action" => "index"
             ));
         }
+		
+        $id_us = $this->request->getPost("id");
 
-        $id_us = $this->request->getPost("id_us");
-
-        $us = UserStory::findFirstByid_us($id_us);
+		$us = UserStory::findFirst(array(
+			'id_us = :id_us:',
+			'bind' => array('id_us' => $id_us)
+		));
         if (!$us) {
             $this->flash->error("Cette US n'existe pas " . $id_us);
 
@@ -115,14 +117,13 @@ class UserStoryController extends ControllerBase
                 "action" => "index"
             ));
         }
-
+		
+		$us->id_us = $id_us;
         $us->title = $this->request->getPost("title");
         $us->content = $this->request->getPost("content");
         $us->cost = $this->request->getPost("cost");
         
-
         if (!$us->save()) {
-
             foreach ($us->getMessages() as $message) {
                 $this->flash->error($message);
             }
