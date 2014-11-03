@@ -1,0 +1,48 @@
+
+<?php echo $this->tag->form("userstory/create") ?>
+
+<table width="100%">
+    <tr>
+        <td align="left"><?php echo $this->tag->linkTo(array("backlog/index", "Retour")) ?></td>
+    </tr>
+</table>
+
+<?php echo $this->getContent(); ?>
+
+<div align="center">
+    <h1>New US</h1>
+</div>
+
+<table>
+    <tr>
+        <td align="right">
+            <label for="title">Title</label>
+        </td>
+        <td align="left">
+            <?php echo $this->tag->textField(array("title", "size" => 10)) ?>
+        </td>
+    </tr>
+    <tr>
+        <td align="right">
+            <label for="content">Content</label>
+        </td>
+        <td align="left">
+            <?php echo $this->tag->textField(array("content", "size" => 254)) ?>
+        </td>
+    </tr>
+    <tr>
+        <td align="right">
+            <label for="cost">Coût</label>
+        </td>
+        <td align="left">
+            <?php echo $this->tag->numericField(array("cost")) ?>
+        </td>
+    </tr>
+
+    <tr>
+        <td></td>
+        <td><?php echo $this->tag->submitButton("Valider") ?></td>
+    </tr>
+</table>
+
+</form>

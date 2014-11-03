@@ -16,8 +16,10 @@ CREATE TABLE `project` (
 );
 
 CREATE TABLE `member` (
+  `id_member` INT NOT NULL AUTO_INCREMENT,
   `id_user` INT,
-  `id_project` INT
+  `id_project` INT,
+  PRIMARY KEY (`id_member`)
 );
 
 CREATE TABLE `user_story` (
@@ -29,8 +31,10 @@ CREATE TABLE `user_story` (
 );
 
 CREATE TABLE `backlog` (
+  `id_backlog` INT NOT NULL AUTO_INCREMENT,
   `id_project` INT,
-  `id_us` INT
+  `id_us` INT,
+  PRIMARY KEY  (`id_backlog`)
 );
 
 CREATE TABLE `sprint` (
@@ -43,8 +47,10 @@ CREATE TABLE `sprint` (
 );
 
 CREATE TABLE `sprint_us` (
+  `id_sprint_us` INT NOT NULL AUTO_INCREMENT,
   `id_sprint` INT,
-  `id_us` INT
+  `id_us` INT,
+  PRIMARY KEY  (`id_sprint_us`)
 );
 
 CREATE TABLE `task` (
@@ -58,13 +64,17 @@ CREATE TABLE `task` (
 );
 
 CREATE TABLE `sprint_task` (
+  `id_sprint_task` INT NOT NULL AUTO_INCREMENT,
   `id_sprint` INT,
-  `id_task` INT
+  `id_task` INT,
+  PRIMARY KEY  (`id_sprint_task`)
 );
 
 CREATE TABLE `dependancy` (
+  `id_dependancy` INT NOT NULL AUTO_INCREMENT,
   `id_task1` INT,
-  `id_task2` INT
+  `id_task2` INT,
+  PRIMARY KEY  (`id_dependancy`)
 );
 
 

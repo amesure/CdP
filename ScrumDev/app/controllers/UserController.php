@@ -111,7 +111,6 @@ class UserController extends ControllerBase
         $user->email = $this->request->getPost("email", "email");
         $user->password = $this->request->getPost("password");
         
-
         if (!$user->save()) {
             foreach ($user->getMessages() as $message) {
                 $this->flash->error($message);
@@ -254,7 +253,7 @@ class UserController extends ControllerBase
         }
 
         return $this->dispatcher->forward(array(
-            'controller' => 'project',
+            'controller' => 'backlog',
             'action' => 'index'
         ));
     }
