@@ -109,7 +109,11 @@ class UserController extends ControllerBase
 
         $user->login = $this->request->getPost("login");
         $user->email = $this->request->getPost("email", "email");
+
+        $password = $this->request->getPost("password");
         $user->password = $this->request->getPost("password");
+        //$user->password = $this->security->hash($password);
+        //echo $user->password;
         
         if (!$user->save()) {
             foreach ($user->getMessages() as $message) {
@@ -228,34 +232,40 @@ class UserController extends ControllerBase
      */
     public function loginAction()
     {
+       
 
         if ($this->request->isPost()) {
 
-            $user = User::findFirst(array(
-                'login = :login: and password = :password:',
-                'bind' => array(
-                    'login' => $this->request->getPost("login"),
-                    'password' => $this->request->getPost("password")
-                )
-            ));
+            $login = $this->request->getPost("login");
+            $password = $this->request->getPost("password");
 
-            if ($user === false){
-                $this->flash->error("Cet utilisateur n'existe pas.");
+            $user = User::findFirstByLogin($login);
+
+            if ($user) {
+                if($password === $user->password) {
+                //if($this->security->checkHash($password,$user->password)) {
+                    $this->session->set('auth', $user->id_user);
+                    $this->flash->success("Vous vous êtes correctement connecté.");
+                    return $this->dispatcher->forward(array(
+                        'controller' => 'project',
+                        'action' => 'index'
+                    ));
+                } else {
+                    $this->flash->error("Mot de passe incorrect.");
+                    return $this->dispatcher->forward(array(
+                        'controller' => 'user',
+                        'action' => 'index'
+                ));
+                }
+            } else {
+                 $this->flash->error("Cet utilisateur n'existe pas.");
                 return $this->dispatcher->forward(array(
                     'controller' => 'user',
                     'action' => 'index'
                 ));
             }
+        }    
 
-            $this->session->set('auth', $user->id);
-
-            $this->flash->success("You've been successfully logged in");
-        }
-
-        return $this->dispatcher->forward(array(
-            'controller' => 'project',
-            'action' => 'index'
-        ));
     }
 
     /**
