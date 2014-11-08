@@ -4,7 +4,7 @@ use Phalcon\Mvc\Model\Validator\Uniqueness as Uniqueness;
 use Phalcon\Mvc\Model\Validator\Email as EmailValidator;
 use Phalcon\Mvc\Model\Validator\PresenceOf as PresenceOf;
 
-class User extends \Phalcon\Mvc\Model
+class Member extends \Phalcon\Mvc\Model
 {
 
     /**
@@ -14,16 +14,16 @@ class User extends \Phalcon\Mvc\Model
     public $id_project;
 
     /**
-     * @var string
+     * @var integer
      *
      */
     public $id_user;
 
     /**
-     * @var string
+     * @var integer
      *
      */
-
+	public $id_member;
     /**
      * Initializer method for model.
      */

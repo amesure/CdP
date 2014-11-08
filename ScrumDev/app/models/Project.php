@@ -4,7 +4,7 @@ use Phalcon\Mvc\Model\Validator\Uniqueness as Uniqueness;
 use Phalcon\Mvc\Model\Validator\Email as EmailValidator;
 use Phalcon\Mvc\Model\Validator\PresenceOf as PresenceOf;
 
-class User extends \Phalcon\Mvc\Model
+class Project extends \Phalcon\Mvc\Model
 {
 
     /**

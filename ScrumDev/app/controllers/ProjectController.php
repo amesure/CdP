@@ -3,6 +3,7 @@
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\Model as Paginator;
 
+
 class ProjectController extends ControllerBase
 {
 
@@ -11,12 +12,16 @@ class ProjectController extends ControllerBase
      */
     public function indexAction()
     {
-        $this->persistent->parameters = null;
+	 
+	$id_user=$this->session->get("auth");
+	$id_project=Member::findFirstByid_user($id_user);
+	$project=Project::findFirstByid_project($id_project);
+
     }
 
     /**
      * Searches for project
-     */
+     /
     public function searchAction()
     {
   
@@ -54,7 +59,7 @@ class ProjectController extends ControllerBase
     }
 
 
-    /**
+    /*
      * Displayes the creation form
      */
     public function newAction()
@@ -66,14 +71,14 @@ class ProjectController extends ControllerBase
      * Edits a project
      *
      * @param string $id_project
-     */
+     /
     public function editAction($id_project)
     {
 
         if (!$this->request->isPost()) {
 
             $project = Project::findFirstByid_project($id_project);
-            if (!$) {
+            if (!$project) {
                 $this->flash->error("project was not found");
 
                 return $this->dispatcher->forward(array(
@@ -106,10 +111,12 @@ class ProjectController extends ControllerBase
         }
 
         $project = new Project();
+		$member= new Member();
 
         $project->title = $this->request->getPost("title");
         $project->content = $this->request->getPost("content");
         $project->access = $this->request->getPost("access");
+		
         
 
         if (!$project->save()) {
@@ -122,12 +129,17 @@ class ProjectController extends ControllerBase
                 "action" => "new"
             ));
         }
+		
+		$member->id_project=$project->id_project;
+		$member->id_user=$this->session->get('auth');
+		
+		$member->save();
 
-        $this->flash->success("Votre inscription s'est déroulée correctement");
+       $this->flash->success("Le Projet a été créé");
 
         return $this->dispatcher->forward(array(
             "controller" => "project",
-            "action" => "index"
+            "action" => "new"
         ));
 
     }
@@ -135,7 +147,7 @@ class ProjectController extends ControllerBase
     /**
      * Saves a project edited
      *
-     */
+     /
     public function saveAction()
     {
 
@@ -150,7 +162,7 @@ class ProjectController extends ControllerBase
 
         $project = Project::findFirstByid_project($id_project);
         if (!$project) {
-            $this->flash->error("Cet utilisateur n'existe pas " . $id_project);
+            $this->flash->error("Ce projet n'existe pas " . $id_project);
 
             return $this->dispatcher->forward(array(
                 "controller" => "project",
@@ -189,7 +201,7 @@ class ProjectController extends ControllerBase
      * Deletes a project
      *
      * @param string $id_project
-     */
+     /
     public function deleteAction($id_project)
     {
 
@@ -221,55 +233,8 @@ class ProjectController extends ControllerBase
             "controller" => "project",
             "action" => "index"
         ));
-    }
+    }*/
 
-    /**
-     * Login a project
-     *
-     */
-    public function titleAction()
-    {
-
-        if ($this->request->isPost()) {
-
-            $project = Project::findFirst(array(
-                'title = :title: and access = :access:',
-                'bind' => array(
-                    'title' => $this->request->getPost("title"),
-                    'access' => $this->request->getPost("access")
-                )
-            ));
-
-            if ($project === false){
-                $this->flash->error("Cet utilisateur n'existe pas.");
-                return $this->dispatcher->forward(array(
-                    'controller' => 'project',
-                    'action' => 'index'
-                ));
-            }
-
-            $this->session->set('auth', $project->id);
-
-            $this->flash->success("You've been successfully logged in");
-        }
-
-        return $this->dispatcher->forward(array(
-            'controller' => 'project',
-            'action' => 'index'
-        ));
-    }
-
-    /**
-     * Logout a project
-     *
-     */
-    public function logoutAction()
-    {
-        $this->session->remove('auth');
-        return $this->dispatcher->forward(array(
-            'controller' => 'index',
-            'action' => 'index'
-        ));
-    }
 
 }
+?>

@@ -255,7 +255,7 @@ class UserController extends ControllerBase
 
         return $this->dispatcher->forward(array(
             'controller' => 'project',
-            'action' => 'index'
+            'action' => 'new'
         ));
     }
 
