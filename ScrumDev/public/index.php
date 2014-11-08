@@ -20,6 +20,15 @@ try {
     include __DIR__ . "/../app/config/services.php";
 
     /**
+     * Start the session the first time some component request the session service
+     */
+    $di->set('session', function() {
+        $session = new \Phalcon\Session\Adapter\Files();
+        $session->start();
+        return $session;
+    });
+
+    /**
      * Handle the request
      */
     $application = new \Phalcon\Mvc\Application($di);
