@@ -11,7 +11,13 @@ class SprintController extends ControllerBase
      */
     public function indexAction()
     {
-        $this->view->setVar('sprint', Sprint::find());
+        if ($this->session->has("proj")) 
+            $id_proj = $this->session->get("id_proj");
+     
+        $sprints = Sprint::find(array(
+            'id_project = '.$id_proj.''
+        ));
+        $this->view->setVar('sprint', $sprints);
     }
 
 

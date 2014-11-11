@@ -35,6 +35,7 @@ class ProjectController extends ControllerBase
             "page" => $numberPage));
 
 			 $this->view->page = $paginator->getPaginate();
+        $this->session->remove('id_proj');
 
     }
 	
@@ -46,6 +47,8 @@ class ProjectController extends ControllerBase
 		->andWhere("id_user=:iduser:")
 		->bind(array("idpro" => $id_project,"iduser"=>$this->session->get("auth")))
 		->execute();
+
+        $this->session->set('id_proj', $project->id_project);
 		$this->view->member=$member;
 		$this->view->project=$project;
 			

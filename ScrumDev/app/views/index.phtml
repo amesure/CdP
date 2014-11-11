@@ -4,7 +4,7 @@
     <head>
         <meta charset="utf-8">
         <title>ScrumDev</title>
-        <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css"/>
+        <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
@@ -27,15 +27,17 @@
                                 <li>
                                     <?php echo Phalcon\Tag::linkTo('project/index', '+Projets') ?>
                                 </li>
-                                <li>
-                                    <?php echo Phalcon\Tag::linkTo('backlog/index', '+Backlog') ?>
-                                </li>
-                                <li>
-                                    <?php echo Phalcon\Tag::linkTo('sprint/index', '+Sprints') ?>
-                                </li>
-                                <!--<li>
-                                    <?php echo Phalcon\Tag::linkTo('kanban/index', '+Kanban') ?>
-                                </li>-->
+                                <?php if ($this->session->has('id_proj')) { ?>
+                                    <li>
+                                        <?php echo Phalcon\Tag::linkTo('backlog/index', '+Backlog') ?>
+                                    </li>
+                                    <li>
+                                        <?php echo Phalcon\Tag::linkTo('sprint/index', '+Sprints') ?>
+                                    </li>
+                                    <!--<li>
+                                        <?php echo Phalcon\Tag::linkTo('kanban/index', '+Kanban') ?>
+                                    </li>-->
+                                <?php } ?>
                                 <li>
                                     <?php echo Phalcon\Tag::linkTo('user/logout', 'Déconnexion') ?>
                                 </li>
@@ -52,6 +54,6 @@
 
         <?php echo $this->getContent() ?>
 
-        <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
     </body>
 </html>
