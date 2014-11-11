@@ -1,0 +1,55 @@
+<?php use Phalcon\Tag as Tag; ?>
+
+<ul class="pager">
+	<li class="previous pull-left">
+		<?php echo Tag::linkTo('sprint/index', '← Go back ') ?>
+	</li>
+</ul>
+
+<div align="center">
+    <h1><?php echo "Sprint ",$sprint->number ?></h1>
+</div>
+
+<p align="left" style='margin-left:50px'>
+	<b>Etat du sprint :</b> <?php echo $prog ?><br/>
+</p>
+
+<div align="left" style='margin-left:50px'>
+	Liste des User Stories :
+</div>
+
+
+<p>
+	<table class="table">
+		<tr>
+			<th>Intitulé</th>
+			<th>Contenu</th>
+			<th>Coût</th>
+
+			<!--<th>Created</th>-->
+		</tr>
+
+	<?php foreach($sprint->sprintUs as $sprUS){ ?>
+		<tr>
+			<td><?php echo $sprUS->userStory->title ?></td>
+			<td><?php echo $sprUS->userStory->content ?></td>
+			<td><?php echo $sprUS->userStory->cost ?></td>
+		</tr>
+	<?php } ?>
+	</table>
+</p>
+
+
+
+
+
+
+
+
+<div style='margin-left:100px'>
+
+	<p style='padding-top:50px'>
+		<?php echo \Phalcon\Tag::linkTo(array("sprint/edit/".$sprint->id_sprint, "Edit")); ?>
+	</p>
+
+</div>

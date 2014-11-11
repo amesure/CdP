@@ -4,14 +4,14 @@ use Phalcon\Mvc\Model\Validator\Uniqueness as Uniqueness;
 use Phalcon\Mvc\Model\Validator\Email as EmailValidator;
 use Phalcon\Mvc\Model\Validator\PresenceOf as PresenceOf;
 
-class UserStory extends \Phalcon\Mvc\Model
+class Project extends \Phalcon\Mvc\Model
 {
 
     /**
      * @var integer
      *
      */
-    public $id_us;
+    public $id_project;
 
     /**
      * @var string
@@ -26,10 +26,10 @@ class UserStory extends \Phalcon\Mvc\Model
     public $content;
 
     /**
-     * @var integer
+     * @var email
      *
      */
-    public $cost;
+    public $access;
 
 
     /**
@@ -37,12 +37,14 @@ class UserStory extends \Phalcon\Mvc\Model
      */
     public function initialize()
     {
-         $this->hasMany("id_us", "SprintUs", "id_us");
+	 $this->hasMany("id_project", "member", "id_project");
+
     }
 
 
     /**
-     * Test during the creation if the title is unique.
+     * Test during the creation if the login and the email address 
+     * is unique.
      */
     public function validation()
     {
@@ -54,22 +56,12 @@ class UserStory extends \Phalcon\Mvc\Model
           'message' => 'Un titre est nécessaire.'
         ]));
 
-        $this->validate(new PresenceOf([
-          'field' => 'content',
-          'message' => 'Une description est nécessaire.'
-        ]));
-
-        $this->validate(new PresenceOf([
-          'field' => 'cost',
-          'message' => 'Un coût est nécessaire.'
-        ]));
-
-
-        // Test if the title doesn't already exist.
         $this->validate(new Uniqueness([
             'field' => 'title',
-            'message' => 'Ce nom d\'US est déjà utilisée.'
+            'message' => 'Ce titre est déjà utilisé.'
         ]));
+
+
 
         if ($this->validationHasFailed() == true) {
             return false;

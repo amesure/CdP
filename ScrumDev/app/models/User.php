@@ -11,7 +11,7 @@ class User extends \Phalcon\Mvc\Model
      * @var integer
      *
      */
-    public $id;
+    public $id_user;
 
     /**
      * @var string
@@ -37,7 +37,7 @@ class User extends \Phalcon\Mvc\Model
      */
     public function initialize()
     {
-
+		$this->hasMany("id", "member", "id_user");
     }
 
 
