@@ -36,12 +36,13 @@
             <label for="access">accés</label>
         </td>
         <td align="left">
-            <?php echo $this->tag->textField(array("access", "size" => 30)) ?>
+            <?php $this->tag->checkField(array("access", "value" => 1)) ?>
         </td>
     </tr>
 
     <tr>
         <td><?php echo $this->tag->hiddenField("id_project") ?></td>
+		<td><?php echo $this->tag->linkTo(array("project/delete/" . $id_project, "supprimer")); ?></td>
         <td><?php echo $this->tag->submitButton("Save") ?></td>
     </tr>
 </table>

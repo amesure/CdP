@@ -24,6 +24,8 @@ class Member extends \Phalcon\Mvc\Model
      *
      */
 	public $id_member;
+	
+	public $type;
     /**
      * Initializer method for model.
      */

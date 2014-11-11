@@ -34,10 +34,10 @@
 
 	  <tr>
         <td align="right">
-            <label for="content">accés</label>
+            <label for="content">accés public</label>
         </td>
         <td align="left">
-            <?php echo $this->tag->textField(array("access", "size" => 30)) ?>
+            <?php echo $this->tag->checkField(array("access", "value" => 1)) ?>
         </td>
     </tr>
 	
