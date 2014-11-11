@@ -265,7 +265,6 @@ class UserController extends ControllerBase
                 ));
             }
         }    
-
     }
 
     /**
