@@ -1,0 +1,33 @@
+<?php use Phalcon\Tag as Tag; ?>
+
+<?php echo $this->getContent() ?>
+
+<div align="right">
+    <?php echo $this->tag->linkTo(array("sprint/new", "Create sprint")) ?>
+</div>
+
+
+
+<div align="center">
+    <h1>Sprints</h1>
+</div>
+
+
+<p>
+    <table class="table">
+        <tr>
+            <th>Titre</th>
+            <th>Début</th>
+            <th>Fin</th>
+        </tr>
+    <?php foreach($sprint as $spr){ ?>
+        <tr>
+            <td><?php echo "Sprint ",$spr->number ?></td>
+            <td><?php echo $spr->begin ?></td>
+            <td><?php echo $spr->end ?></td>
+            <td><?php echo Tag::linkTo('sprint/show/'.$spr->id_sprint, 'Details') ?></td>
+            <td><?php echo Tag::linkTo('sprint/delete/'.$spr->id_sprint, 'Supprimer'); ?></td>
+        </tr>
+    <?php } ?>
+    </table>
+</p>
