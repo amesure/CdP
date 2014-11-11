@@ -11,7 +11,7 @@ class UserStory extends \Phalcon\Mvc\Model
      * @var integer
      *
      */
-    public $id;
+    public $id_us;
 
     /**
      * @var string
@@ -37,7 +37,7 @@ class UserStory extends \Phalcon\Mvc\Model
      */
     public function initialize()
     {
-
+         $this->hasMany("id_us", "SprintUs", "id_us");
     }
 
 
