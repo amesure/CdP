@@ -32,7 +32,7 @@ class Member extends \Phalcon\Mvc\Model
     public function initialize()
     {
 		$this->belongsTo("id_project", "project", "id_project");
-        $this->belongsTo("id_user", "user", "id");
+        $this->belongsTo("id_user", "user", "id_user");
     }
 
 
