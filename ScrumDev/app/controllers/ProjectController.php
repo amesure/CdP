@@ -14,20 +14,8 @@ class ProjectController extends ControllerBase
     {
 	 
 	 $numberPage = 1;
-        if ($this->request->isPost()) {
-            $query = Criteria::fromInput($this->di, "Project", $_POST);
-            $this->persistent->parameters = $query->getParams();
-        } else {
-            $numberPage = $this->request->getQuery("page", "int");
-        }
-
-        $parameters = $this->persistent->parameters;
-        if (!is_array($parameters)) {
-            $parameters = array();
-        }
-        $parameters["order"] = "id_project";
-
-        $project = Project::find($parameters);
+     
+        $project = Project::find();
 
         $paginator = new Paginator(array(
             "data" => $project,
@@ -36,6 +24,7 @@ class ProjectController extends ControllerBase
 
 			 $this->view->page = $paginator->getPaginate();
         $this->session->remove('id_proj');
+		$this->session->remove('perm');
 
     }
 	
@@ -49,6 +38,7 @@ class ProjectController extends ControllerBase
 		->execute();
 
         $this->session->set('id_proj', $project->id_project);
+		$this->session->set('perm',$member->getFirst()->type);
 		$this->view->member=$member;
 		$this->view->project=$project;
 			
@@ -215,7 +205,7 @@ class ProjectController extends ControllerBase
         }
 
         $project->title = $this->request->getPost("title");
-        $project->content = $this->request->getPost("content", "content");
+        $project->content = $this->request->getPost("content");
         $project->access = $this->request->getPost("access");
         
 

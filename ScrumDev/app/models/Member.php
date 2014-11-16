@@ -24,7 +24,13 @@ class Member extends \Phalcon\Mvc\Model
      *
      */
 	public $id_member;
-	
+	/*
+	*@var integer
+	* 0= Scrummaster
+	* 1= membre
+	* 2= invitation envoyé
+	* 3= demande pour rejoindre le projet
+	*/
 	public $type;
     /**
      * Initializer method for model.

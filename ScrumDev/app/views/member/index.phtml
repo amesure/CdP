@@ -22,6 +22,40 @@
 		<?php foreach ($page->items as $member) { ?>
 			<tr>
 				<td><?php echo $member->user->login ?></td>
+				<td><?php 
+				switch($member->type){
+					case 0:
+						echo "ScrumMaster";
+						break;
+					case 1:
+						echo "Membre";
+						break;
+					case 2:
+						echo "Invitation envoyé";
+						break;
+					case 3 :
+						echo "En attente";
+						break;
+						}
+				?></td>
+				<td><?php if($this->session->get("perm")==0){ 
+				
+				switch($member->type){
+					
+					case 1:
+						echo $this->tag->linkTo(array("member/fire/".$member->id_member, "retirer"));
+						break;
+					case 2:
+						echo $this->tag->linkTo(array("member/fire/".$member->id_member, "retirer"));
+						break;
+					case 3 :
+						echo $this->tag->linkTo(array("member/accept/".$member->id_member, "accepter"));
+						echo $this->tag->linkTo(array("member/fire/".$member->id_member, "refuser"));
+						break;
+						}
+						
+						
+					 } ?> </td>
 				
 				
 			</tr>
