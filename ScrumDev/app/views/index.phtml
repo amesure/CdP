@@ -1,4 +1,3 @@
-<?php use Phalcon\Tag as Tag ?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -21,29 +20,29 @@
                     <div class="nav-collapse">
                         <ul class="nav pull-left">
                             <li>
-                                <?php echo Phalcon\Tag::linkTo('index', 'Accueil') ?>
+                                <?php echo $this->tag->linkTo('index', 'Accueil') ?>
                             </li>
                             <?php if ($this->session->has('auth')) { ?>
                                 <li>
-                                    <?php echo Phalcon\Tag::linkTo('project/index', '+Projets') ?>
+                                    <?php echo $this->tag->linkTo('project/index', '+Projets') ?>
                                 </li>
                                 <?php if ($this->session->has('id_proj')) { ?>
                                     <li>
-                                        <?php echo Phalcon\Tag::linkTo('backlog/index', '+Backlog') ?>
+                                        <?php echo $this->tag->linkTo('backlog/index', '+Backlog') ?>
                                     </li>
                                     <li>
-                                        <?php echo Phalcon\Tag::linkTo('sprint/index', '+Sprints') ?>
+                                        <?php echo $this->tag->linkTo('sprint/index', '+Sprints') ?>
                                     </li>
                                     <!--<li>
-                                        <?php echo Phalcon\Tag::linkTo('kanban/index', '+Kanban') ?>
+                                        <?php echo $this->tag->linkTo('kanban/index', '+Kanban') ?>
                                     </li>-->
                                 <?php } ?>
                                 <li>
-                                    <?php echo Phalcon\Tag::linkTo('user/logout', 'Déconnexion') ?>
+                                    <?php echo $this->tag->linkTo('user/logout', 'Déconnexion') ?>
                                 </li>
                             <?php } else { ?>
                                 <li>
-                                    <?php echo Phalcon\Tag::linkTo('user/index', 'Connexion') ?>
+                                    <?php echo $this->tag->linkTo('user/index', 'Connexion') ?>
                                 </li>
                             <?php } ?>
                         </ul>

@@ -1,33 +1,32 @@
-<?php use Phalcon\Tag as Tag; ?>
-
 <?php echo $this->getContent() ?>
 
+<?php if ($this->session->has('auth')){?>
+
 <div align="right">
-    <?php echo $this->tag->linkTo(array("sprint/new", "Create sprint")) ?>
+    <?php echo $this->tag->linkTo(array("sprint/new", "Nouveau sprint", "class" => "btn")) ?>
 </div>
 
+<h1>Sprints</h1>
 
-
-<div align="center">
-    <h1>Sprints</h1>
-</div>
-
-
-<p>
-    <table class="table">
-        <tr>
-            <th>Titre</th>
-            <th>Début</th>
-            <th>Fin</th>
-        </tr>
+<table class="table" style="width:80% !important">
+    <tr>
+        <th>Titre</th>
+        <th>Début</th>
+        <th>Fin</th>
+        <th></th>
+        <th></th>
+    </tr>
     <?php foreach($sprint as $spr){ ?>
-        <tr>
-            <td><?php echo "Sprint ",$spr->number ?></td>
-            <td><?php echo $spr->begin ?></td>
-            <td><?php echo $spr->end ?></td>
-            <td><?php echo Tag::linkTo('sprint/show/'.$spr->id_sprint, 'Details') ?></td>
-            <td><?php echo Tag::linkTo('sprint/delete/'.$spr->id_sprint, 'Supprimer'); ?></td>
-        </tr>
+    <tr>
+        <td><?php echo "Sprint ",$spr->number ?></td>
+        <td><?php echo $spr->begin ?></td>
+        <td><?php echo $spr->end ?></td>
+        <td><?php echo $this->tag->linkTo('sprint/show/'.$spr->id_sprint, 'Details') ?></td>
+        <td><?php echo $this->tag->linkTo('sprint/delete/'.$spr->id_sprint, 'Supprimer'); ?></td>
+    </tr>
     <?php } ?>
-    </table>
-</p>
+</table>
+
+<?php } else { 
+    $this->flash->error("Vous devez être connecté pour avoir accès à cette page.");
+} ?>

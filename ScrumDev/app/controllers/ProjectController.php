@@ -39,8 +39,10 @@ class ProjectController extends ControllerBase
 
     }
 	
+
 	public function showAction($id_project)
 	{
+
 		$project=Project::findFirstByid_project($id_project);
 		$member = Member::query()
 		->where("id_project = :idpro:")
@@ -215,7 +217,7 @@ class ProjectController extends ControllerBase
         }
 
         $project->title = $this->request->getPost("title");
-        $project->content = $this->request->getPost("content", "content");
+        $project->content = $this->request->getPost("content");
         $project->access = $this->request->getPost("access");
         
 

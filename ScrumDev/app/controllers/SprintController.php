@@ -11,12 +11,11 @@ class SprintController extends ControllerBase
      */
     public function indexAction()
     {
+        $id_proj = "";
         if ($this->session->has("proj")) 
             $id_proj = $this->session->get("id_proj");
      
-        $sprints = Sprint::find(array(
-            'id_project = '.$id_proj.''
-        ));
+        $sprints = Sprint::findByid_project($id_proj);
         $this->view->setVar('sprint', $sprints);
     }
 
@@ -49,8 +48,6 @@ class SprintController extends ControllerBase
                 ));
             }
 
-            $this->view->id_sprint = $sprint->id_sprint;
-
             $this->tag->setDefault("id_sprint", $sprint->id_sprint);
             $this->tag->setDefault("number", $sprint->number);
             $this->tag->setDefault("id_project", $sprint->id_project);
@@ -76,7 +73,7 @@ class SprintController extends ControllerBase
         $sprint = new Sprint();
 
         $sprint->number = $this->request->getPost("number");
-        $sprint->id_project = $this->request->getPost("id_project");
+        $sprint->id_project = $this->session->id_proj;
         $sprint->begin = $this->request->getPost("begin");
         $sprint->end = $this->request->getPost("end");
         
@@ -128,7 +125,7 @@ class SprintController extends ControllerBase
         }
 
         $sprint->number = $this->request->getPost("number");
-        $sprint->id_project = $this->request->getPost("id_project");
+        $sprint->id_project = $this->session->id_proj;
         $sprint->begin = $this->request->getPost("begin");
         $sprint->end = $this->request->getPost("end");
         
@@ -222,15 +219,7 @@ class SprintController extends ControllerBase
             $prog = "Fini";
 
 
-        $sprint_us = $sprint->sprintUs;
-        $sprint_us = $sprint->getSprintUs();
-        foreach ($sprint_us as $spr) {
-            echo $sprint_us->id;
-        }
-
-
         $this->view->setVar('sprint', $sprint);
         $this->view->setVar('prog',$prog);
-        $this->view->setVar('sprintUs',$sprint_us);
     }
 }
