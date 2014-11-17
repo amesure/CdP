@@ -24,7 +24,13 @@ class Member extends \Phalcon\Mvc\Model
      *
      */
 	public $id_member;
-	
+	/*
+	*@var integer
+	* 0= Scrummaster
+	* 1= membre
+	* 2= invitation envoyé
+	* 3= demande pour rejoindre le projet
+	*/
 	public $type;
     /**
      * Initializer method for model.
@@ -32,7 +38,7 @@ class Member extends \Phalcon\Mvc\Model
     public function initialize()
     {
 		$this->belongsTo("id_project", "project", "id_project");
-        $this->belongsTo("id_user", "user", "id");
+        $this->belongsTo("id_user", "user", "id_user");
     }
 
 

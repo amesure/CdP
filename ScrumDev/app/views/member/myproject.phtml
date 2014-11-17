@@ -1,0 +1,80 @@
+<?php use Phalcon\Tag; ?>
+
+<?php echo $this->getContent(); ?>
+
+<table width="100%">
+    <tr>
+        <td align="left">
+            <?php echo $this->tag->linkTo(array("user/index", "Go Back")); ?>
+        </td>
+    </tr>
+</table>
+
+<div align="right">
+    <?php echo $this->tag->linkTo(array("project/index", "back")) ?>
+	<table class="browse" align="center">
+		<thead>
+			<tr>
+				<th>Utilisateur</th>
+			</tr>
+		</thead>
+		<tbody>
+		<?php foreach ($page->items as $member) { ?>
+			<tr>
+				<td><?php echo $member->project->title ?></td>
+				<td><?php 
+				switch($member->type){
+					case 0:
+						echo "ScrumMaster";
+						break;
+					case 1:
+						echo "Membre";
+						break;
+					case 2:
+						echo "Invitation";
+						break;
+					case 3 :
+						echo "En attente";
+						break;
+						}
+				?></td>
+				<td><?php echo $this->tag->linkTo(array("project/show/" . $member->id_project, "Go")); ?></td>				
+				<td><?php 
+				
+				switch($member->type){
+					
+					case 1:
+						echo $this->tag->linkTo(array("member/fire/".$member->id_member, "Quitter"));
+						break;
+					case 2:
+						echo $this->tag->linkTo(array("member/accept/".$member->id_member, "Accepter"));
+						echo $this->tag->linkTo(array("member/fire/".$member->id_member, "Refuser"));
+						break;
+					case 3 :
+						echo $this->tag->linkTo(array("member/fire/".$member->id_member, "Quitter"));
+						break;
+						}					
+						
+					  ?> </td>
+				
+				
+			</tr>
+		<?php } ?>
+		</tbody>
+		<tbody>
+			<tr>
+				<td colspan="2" align="right">
+					<table align="center">
+						<tr>
+							<td><?php echo $this->tag->linkTo("project/index", "First") ?></td>
+							<td><?php echo $this->tag->linkTo("project/index?page=" . $page->before, "Previous") ?></td>
+							<td><?php echo $this->tag->linkTo("project/index?page=" . $page->next, "Next") ?></td>
+							<td><?php echo $this->tag->linkTo("project/index?page=" . $page->last, "Last") ?></td>
+							<td><?php echo $page->current, "/", $page->total_pages ?></td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>

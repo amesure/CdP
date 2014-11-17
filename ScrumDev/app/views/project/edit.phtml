@@ -1,7 +1,7 @@
 
 <?php echo $this->getContent(); ?>
 
-<?php echo $this->tag->form("user/save") ?>
+<?php echo $this->tag->form("project/save") ?>
 
 <table width="100%">
     <tr>
@@ -36,7 +36,7 @@
             <label for="access">accés</label>
         </td>
         <td align="left">
-            <?php $this->tag->checkField(array("access", "value" => 1)) ?>
+            <?php echo $this->tag->checkField(array("access", "value" => 1)) ?>
         </td>
     </tr>
 
