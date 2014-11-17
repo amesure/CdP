@@ -1,50 +1,51 @@
-
 <?php echo $this->getContent(); ?>
 
-<?php echo $this->tag->form("project/save") ?>
+<?php if ($this->session->has('auth')){?>
 
 <table width="100%">
     <tr>
-        <td align="left"><?php echo $this->tag->linkTo(array("project", "Back")) ?></td>
-        <td align="right"><?php echo $this->tag->submitButton("Save") ?></td>
+        <td align="left"><?php echo $this->tag->linkTo(array("project", "Retour", "class" => "btn")) ?></td>
+        <td align="right"><?php echo $this->tag->submitButton(array("Valider", "class" => "btn")) ?></td>
     </tr>
 </table>
 
-<div align="center">
-    <h1>Modfier un Projet</h1>
-</div>
+<h1>Modfier un Projet</h1>
 
-<table>
-    <tr>
-        <td align="right">
-            <label for="title">titre</label>
-        </td>
-        <td align="left">
-            <?php echo $this->tag->textField(array("title", "size" => 30)) ?>
-        </td>
-    </tr>
-    <tr>
-        <td align="right">
-            <label for="content">Description</label>
-        </td>
-        <td align="left">
-            <?php echo $this->tag->textArea(array("content", "cols" => 100, "rows" => 10)) ?>
-        </td>
-    </tr>
-    <tr>
-        <td align="right">
-            <label for="access">accés</label>
-        </td>
-        <td align="left">
-            <?php echo $this->tag->checkField(array("access", "value" => 1)) ?>
-        </td>
-    </tr>
+<?php echo $this->tag->form("project/save") ?>
+    <table>
+        <tr>
+            <td align="right">
+                <label for="title">titre</label>
+            </td>
+            <td align="left">
+                <?php echo $this->tag->textField(array("title", "size" => 30)) ?>
+            </td>
+        </tr>
+        <tr>
+            <td align="right">
+                <label for="content">Description</label>
+            </td>
+            <td align="left">
+                <?php echo $this->tag->textArea(array("content", "cols" => 100, "rows" => 10)) ?>
+            </td>
+        </tr>
+        <tr>
+            <td align="right">
+                <label for="access">Accès</label>
+            </td>
+            <td align="left">
+                <?php echo $this->tag->checkField(array("access", "value" => 1)) ?>
+            </td>
+        </tr>
 
-    <tr>
-        <td><?php echo $this->tag->hiddenField("id_project") ?></td>
-		<td><?php echo $this->tag->linkTo(array("project/delete/" . $id_project, "supprimer")); ?></td>
-        <td><?php echo $this->tag->submitButton("Save") ?></td>
-    </tr>
-</table>
-
+        <tr>
+            <td><?php echo $this->tag->hiddenField("id_project") ?></td>
+            <td><?php echo $this->tag->linkTo(array("project/delete/" . $id_project, "Supprimer")); ?></td>
+            <td><?php echo $this->tag->submitButton("Valider") ?></td>
+        </tr>
+    </table>
 </form>
+
+<?php } else { 
+    $this->flash->error("Vous devez être connecté pour avoir accès à cette page.");
+} ?>

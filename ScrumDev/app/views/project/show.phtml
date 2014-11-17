@@ -1,17 +1,15 @@
-<?php use Phalcon\Tag; ?>
-
 <?php echo $this->getContent(); ?>
+
+<?php if ($this->session->has('auth')){?>
 
 <table width="100%">
     <tr>
-        <td align="left">
-            <?php echo $this->tag->linkTo(array("user/index", "deconnexion")); ?>
-        </td>
+        <td align="left"><?php echo $this->tag->linkTo(array("project/index", "Retour", "class"=>"btn")); ?></td>
     </tr>
 </table>
 
 
-   <table align="center">
+<table>
     <tr>
         <td align="right">
             <label for="title">Title</label>
@@ -30,10 +28,13 @@
     </tr>
 
     <tr>
-		<td><?php 	 echo $this->tag->linkTo(array("member/inscription/".$project->id_project, "Postuler")); ?></td>
-        <td><?php 	 echo $this->tag->linkTo(array("backlog/index", "Backlog")); ?></td>
-		<td><?php 	 echo $this->tag->linkTo(array("member/index", "Liste Membres")); ?></td>
-		<td><?php 	 echo $this->tag->linkTo(array("project/edit/" . $project->id_project, "edition")); ?></td>
+		<td><?php echo $this->tag->linkTo(array("member/inscription".$project->id_project, "Postuler")); ?></td>
+        <td><?php echo $this->tag->linkTo(array("backlog/index", "Backlog")); ?></td>
+		<td><?php echo $this->tag->linkTo(array("member/index", "Liste Membres")); ?></td>
+		<td><?php echo $this->tag->linkTo(array("project/edit/" . $project->id_project, "edition")); ?></td>
     </tr>
 </table>
-		
+
+<?php } else { 
+    $this->flash->error("Vous devez être connecté pour avoir accès à cette page.");
+} ?>
