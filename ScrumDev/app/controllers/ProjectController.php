@@ -15,7 +15,8 @@ class ProjectController extends ControllerBase
 	 
 	 $numberPage = 1;
      
-        $project = Project::find();
+        $project = Project::query()->where("Project.access=1")		
+		->execute();
 
         $paginator = new Paginator(array(
             "data" => $project,
@@ -38,7 +39,8 @@ class ProjectController extends ControllerBase
 		->execute();
 
         $this->session->set('id_proj', $project->id_project);
-		$this->session->set('perm',$member->getFirst()->type);
+		if($member->count()>0){
+		$this->session->set('perm',$member->getFirst()->type);}
 		$this->view->member=$member;
 		$this->view->project=$project;
 			

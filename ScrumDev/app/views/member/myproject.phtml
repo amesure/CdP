@@ -5,7 +5,7 @@
 <table width="100%">
     <tr>
         <td align="left">
-            <?php echo $this->tag->linkTo(array("project/index", "Go Back")); ?>
+            <?php echo $this->tag->linkTo(array("user/index", "Go Back")); ?>
         </td>
     </tr>
 </table>
@@ -16,13 +16,12 @@
 		<thead>
 			<tr>
 				<th>Utilisateur</th>
-				<th> Statut</th>
 			</tr>
 		</thead>
 		<tbody>
 		<?php foreach ($page->items as $member) { ?>
 			<tr>
-				<td><?php echo $member->user->login ?></td>
+				<td><?php echo $member->project->title ?></td>
 				<td><?php 
 				switch($member->type){
 					case 0:
@@ -32,31 +31,31 @@
 						echo "Membre";
 						break;
 					case 2:
-						echo "Invitation envoyé";
+						echo "Invitation";
 						break;
 					case 3 :
 						echo "En attente";
 						break;
 						}
 				?></td>
-				<td><?php if($this->session->get("perm")==0){ 
+				<td><?php echo $this->tag->linkTo(array("project/show/" . $member->id_project, "Go")); ?></td>				
+				<td><?php 
 				
 				switch($member->type){
 					
 					case 1:
-						echo $this->tag->linkTo(array("member/fire/".$member->id_member, "retirer"));
+						echo $this->tag->linkTo(array("member/fire/".$member->id_member, "Quitter"));
 						break;
 					case 2:
-						echo $this->tag->linkTo(array("member/fire/".$member->id_member, "retirer"));
+						echo $this->tag->linkTo(array("member/accept/".$member->id_member, "Accepter"));
+						echo $this->tag->linkTo(array("member/fire/".$member->id_member, "Refuser"));
 						break;
 					case 3 :
-						echo $this->tag->linkTo(array("member/accept/".$member->id_member, "accepter"));
-						echo $this->tag->linkTo(array("member/fire/".$member->id_member, "refuser"));
+						echo $this->tag->linkTo(array("member/fire/".$member->id_member, "Quitter"));
 						break;
-						}
+						}					
 						
-						
-					 } ?> </td>
+					  ?> </td>
 				
 				
 			</tr>
