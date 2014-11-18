@@ -60,14 +60,8 @@ CREATE TABLE `task` (
   `cost` INT,
   `status` VARCHAR(20),
   `id_user` INT,
-  PRIMARY KEY  (`id_task`)
-);
-
-CREATE TABLE `sprint_task` (
-  `id_sprint_task` INT NOT NULL AUTO_INCREMENT,
   `id_sprint` INT,
-  `id_task` INT,
-  PRIMARY KEY  (`id_sprint_task`)
+  PRIMARY KEY  (`id_task`)
 );
 
 CREATE TABLE `dependancy` (
@@ -88,7 +82,6 @@ ALTER TABLE `sprint` ADD CONSTRAINT `sprint_fk1` FOREIGN KEY (`id_project`) REFE
 ALTER TABLE `sprint_us` ADD CONSTRAINT `sprint_us_fk1` FOREIGN KEY (`id_sprint`) REFERENCES sprint(`id_sprint`);
 ALTER TABLE `sprint_us` ADD CONSTRAINT `sprint_us_fk2` FOREIGN KEY (`id_us`) REFERENCES user_story(`id_us`);
 ALTER TABLE `task` ADD CONSTRAINT `task_fk1` FOREIGN KEY (`id_user`) REFERENCES user(`id_user`);
-ALTER TABLE `sprint_task` ADD CONSTRAINT `sprint_task_fk1` FOREIGN KEY (`id_sprint`) REFERENCES sprint(`id_sprint`);
-ALTER TABLE `sprint_task` ADD CONSTRAINT `sprint_task_fk2` FOREIGN KEY (`id_task`) REFERENCES task(`id_task`);
+ALTER TABLE `task` ADD CONSTRAINT `task_fk2` FOREIGN KEY (`id_sprint`) REFERENCES sprint(`id_sprint`);
 ALTER TABLE `dependancy` ADD CONSTRAINT `dependancy_fk1` FOREIGN KEY (`id_task1`) REFERENCES task(`id_task`);
 ALTER TABLE `dependancy` ADD CONSTRAINT `dependancy_fk2` FOREIGN KEY (`id_task2`) REFERENCES task(`id_task`);

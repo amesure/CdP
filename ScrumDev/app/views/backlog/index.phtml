@@ -1,48 +1,49 @@
-<?php use Phalcon\Tag; ?>
-
 <?php echo $this->getContent(); ?>
+
+<?php if ($this->session->has('auth')){?>
 
 <table width="100%">
     <tr>
-        <td align="left">
-            <?php echo $this->tag->linkTo(array("user/index", "Go Back")); ?>
-        </td>
+        <td align="left"><?php echo $this->tag->linkTo(array("project/index", "Retour", "class"=>"btn")); ?></td>
+        <td align="right"><?php echo $this->tag->linkTo(array("userstory/new", "Nouvelle User Story", "class"=>"btn")) ?></td>
     </tr>
 </table>
 
-<div align="right">
-    <?php echo $this->tag->linkTo(array("userstory/new", "New US")) ?>
-	<table class="browse" align="center">
-		<thead>
-			<tr>
-				<th>Id of project</th>
-				<th>Id of US</th>
-			</tr>
-		</thead>
-		<tbody>
-		<?php foreach ($page->items as $us) { ?>
-			<tr>
-				<td><?php echo $us->id_project ?></td>
-				<td><?php echo $us->id_us ?></td>
-				<td><?php echo $this->tag->linkTo(array("userstory/edit/" . $us->id_us, "Edit")); ?></td>
-				<td><?php echo $this->tag->linkTo(array("backlog/delete/" . $us->id_us, "Delete")); ?></td>
-			</tr>
-		<?php } ?>
-		</tbody>
-		<tbody>
-			<tr>
-				<td colspan="2" align="right">
-					<table align="center">
-						<tr>
-							<td><?php echo $this->tag->linkTo("backlog/index", "First") ?></td>
-							<td><?php echo $this->tag->linkTo("backlog/index?page=" . $page->before, "Previous") ?></td>
-							<td><?php echo $this->tag->linkTo("backlog/index?page=" . $page->next, "Next") ?></td>
-							<td><?php echo $this->tag->linkTo("backlog/index?page=" . $page->last, "Last") ?></td>
-							<td><?php echo $page->current, "/", $page->total_pages ?></td>
-						</tr>
-					</table>
-				</td>
-			</tr>
-		</tbody>
-	</table>
-</div>
+
+<table>
+	<thead>
+		<tr>
+			<th>Id of project</th>
+			<th>Id of US</th>
+		</tr>
+	</thead>
+	<tbody>
+	<?php foreach ($page->items as $us) { ?>
+		<tr>
+			<td><?php echo $us->id_project ?></td>
+			<td><?php echo $us->id_us ?></td>
+			<td><?php echo $this->tag->linkTo(array("userstory/edit/" . $us->id_us, "Modifier")); ?></td>
+			<td><?php echo $this->tag->linkTo(array("backlog/delete/" . $us->id_us, "Supprimer")); ?></td>
+		</tr>
+	<?php } ?>
+	</tbody>
+	<tbody>
+		<tr>
+			<td colspan="2" align="right">
+				<table align="center">
+					<tr>
+						<td><?php echo $this->tag->linkTo("backlog/index", "Début") ?></td>
+						<td><?php echo $this->tag->linkTo("backlog/index?page=" . $page->before, "Précédent") ?></td>
+						<td><?php echo $this->tag->linkTo("backlog/index?page=" . $page->next, "Suivant") ?></td>
+						<td><?php echo $this->tag->linkTo("backlog/index?page=" . $page->last, "Fin") ?></td>
+						<td><?php echo $page->current, "/", $page->total_pages ?></td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<?php } else { 
+    $this->flash->error("Vous devez être connecté pour avoir accès à cette page.");
+} ?>

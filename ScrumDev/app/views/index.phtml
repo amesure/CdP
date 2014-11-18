@@ -1,10 +1,9 @@
-<?php use Phalcon\Tag as Tag ?>
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="utf-8">
         <title>ScrumDev</title>
-        <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css"/>
+        <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
@@ -21,27 +20,29 @@
                     <div class="nav-collapse">
                         <ul class="nav pull-left">
                             <li>
-                                <?php echo Phalcon\Tag::linkTo('index', 'Accueil') ?>
+                                <?php echo $this->tag->linkTo('index', 'Accueil') ?>
                             </li>
                             <?php if ($this->session->has('auth')) { ?>
                                 <li>
-                                    <?php echo Phalcon\Tag::linkTo('project/index', '+Projets') ?>
+                                    <?php echo $this->tag->linkTo('project/index', '+Projets') ?>
                                 </li>
+                                <?php if ($this->session->has('id_proj')) { ?>
+                                    <li>
+                                        <?php echo $this->tag->linkTo('backlog/index', '+Backlog') ?>
+                                    </li>
+                                    <li>
+                                        <?php echo $this->tag->linkTo('sprint/index', '+Sprints') ?>
+                                    </li>
+                                    <!--<li>
+                                        <?php echo $this->tag->linkTo('kanban/index', '+Kanban') ?>
+                                    </li>-->
+                                <?php } ?>
                                 <li>
-                                    <?php echo Phalcon\Tag::linkTo('backlog/index', '+Backlog') ?>
-                                </li>
-                                <li>
-                                    <?php echo Phalcon\Tag::linkTo('sprint/index', '+Sprints') ?>
-                                </li>
-                                <!--<li>
-                                    <?php echo Phalcon\Tag::linkTo('kanban/index', '+Kanban') ?>
-                                </li>-->
-                                <li>
-                                    <?php echo Phalcon\Tag::linkTo('user/logout', 'Déconnexion') ?>
+                                    <?php echo $this->tag->linkTo('user/logout', 'Déconnexion') ?>
                                 </li>
                             <?php } else { ?>
                                 <li>
-                                    <?php echo Phalcon\Tag::linkTo('user/index', 'Connexion') ?>
+                                    <?php echo $this->tag->linkTo('user/index', 'Connexion') ?>
                                 </li>
                             <?php } ?>
                         </ul>
@@ -52,6 +53,6 @@
 
         <?php echo $this->getContent() ?>
 
-        <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
     </body>
 </html>

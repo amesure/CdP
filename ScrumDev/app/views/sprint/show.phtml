@@ -1,14 +1,19 @@
-<?php use Phalcon\Tag as Tag; ?>
+<?php echo $this->getContent(); ?>
 
-<ul class="pager">
-	<li class="previous pull-left">
-		<?php echo Tag::linkTo('sprint/index', '← Go back ') ?>
-	</li>
-</ul>
+<?php if ($this->session->has('auth')){?>
 
-<div align="center">
-    <h1><?php echo "Sprint ",$sprint->number ?></h1>
-</div>
+<table width="100%">
+    <tr>
+        <td align="left"><?php echo $this->tag->linkTo(array("sprint/index", "Retour", "class"=>"btn")); ?></td>
+        <td align="right"><?php echo $this->tag->linkTo(array("sprint/edit/".$sprint->id_sprint, "Modifier", "class"=>"btn")); ?></td>
+    </tr>
+    <tr>
+    	<td align="left"></td>
+    	<td align="right"><?php echo $this->tag->linkTo(array("task/index", "Tâches", "class"=>"btn")); ?></td>
+    </tr>
+</table>
+
+<h1><?php echo "Sprint ",$sprint->number ?></h1>
 
 <p align="left" style='margin-left:50px'>
 	<b>Etat du sprint :</b> <?php echo $prog ?><br/>
@@ -18,38 +23,23 @@
 	Liste des User Stories :
 </div>
 
+<table class="table" style="width:80% !important">
+	<tr>
+		<th>Intitulé</th>
+		<th>Contenu</th>
+		<th>Coût</th>
+	</tr>
 
-<p>
-	<table class="table">
-		<tr>
-			<th>Intitulé</th>
-			<th>Contenu</th>
-			<th>Coût</th>
+<?php foreach($sprint->sprintUs as $sprUS){ ?>
+	<tr>
+		<td><?php echo $sprUS->userStory->title ?></td>
+		<td><?php echo $sprUS->userStory->content ?></td>
+		<td><?php echo $sprUS->userStory->cost ?></td>
+	</tr>
+<?php } ?>
+</table>
 
-			<!--<th>Created</th>-->
-		</tr>
+<?php } else { 
+    $this->flash->error("Vous devez être connecté pour avoir accès à cette page.");
+} ?>
 
-	<?php foreach($sprint->sprintUs as $sprUS){ ?>
-		<tr>
-			<td><?php echo $sprUS->userStory->title ?></td>
-			<td><?php echo $sprUS->userStory->content ?></td>
-			<td><?php echo $sprUS->userStory->cost ?></td>
-		</tr>
-	<?php } ?>
-	</table>
-</p>
-
-
-
-
-
-
-
-
-<div style='margin-left:100px'>
-
-	<p style='padding-top:50px'>
-		<?php echo \Phalcon\Tag::linkTo(array("sprint/edit/".$sprint->id_sprint, "Edit")); ?>
-	</p>
-
-</div>
