@@ -11,12 +11,15 @@ class SprintController extends ControllerBase
      */
     public function indexAction()
     {
-        if ($this->session->has("proj")) 
+        if ($this->session->has("id_proj")) 
             $id_proj = $this->session->get("id_proj");
-     
+		
         $sprints = Sprint::find(array(
             'id_project = '.$id_proj.''
         ));
+		
+		$this->session->remove("id_sprint");
+		
         $this->view->setVar('sprint', $sprints);
     }
 
@@ -196,7 +199,6 @@ class SprintController extends ControllerBase
 
     public function showAction($id)
     {
-    
         $sprint = Sprint::findFirst(array(
             'id_sprint = :id:',
             'bind' => array(
@@ -211,7 +213,8 @@ class SprintController extends ControllerBase
                 'action' => 'index'
             ));
         }
-
+		$this->session->set("id_sprint", $id);
+		
         $prog = "";
         $date = date("Y-m-d");
         if ($date < $sprint->begin)

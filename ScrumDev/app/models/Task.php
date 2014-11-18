@@ -1,44 +1,40 @@
 <?php
-
-use Phalcon\Mvc\Model\Validator\Uniqueness as Uniqueness;
-use Phalcon\Mvc\Model\Validator\Email as EmailValidator;
 use Phalcon\Mvc\Model\Validator\PresenceOf as PresenceOf;
 
 class Task extends \Phalcon\Mvc\Model
 {
 	/**
      * @var integer
-     *
      */
     public $id;
 
     /**
      * @var integer
-     *
      */
-    public $id_member;
+    public $id_user;
 
+	/**
+	 * @var integer
+	 */
+	public $id_sprint;
+	
     /**
-     * @var integer
-     *
+     * @var string
      */
     public $title;
 
 	/**
      * @var string
-     *
      */
     public $content;
 
 	/**
      * @var integer
-     *
      */
     public $cost;
 
 	/**
      * @var string
-     *
      */
     public $status;
 
@@ -50,7 +46,6 @@ class Task extends \Phalcon\Mvc\Model
 
     }
 
-
     /**
      * Test during the creation.
      */
@@ -58,19 +53,22 @@ class Task extends \Phalcon\Mvc\Model
     {
 		$this->validate(new PresenceOf([
           'field' => 'title',
-          'message' => 'Un titre est nécessaire.'
+          'message' => 'Un titre est necessaire.'
         ]));
 		
 		$this->validate(new PresenceOf([
           'field' => 'content',
-          'message' => 'Un contenu est nécessaire.'
+          'message' => 'Un contenu est necessaire.'
         ]));
-	
+		
+		$this->validate(new PresenceOf([
+          'field' => 'id_sprint',
+          'message' => 'Un sprint est necessaire.'
+        ]));
+		
         if ($this->validationHasFailed() == true) {
             return false;
         }
         
     }
-
-
 }

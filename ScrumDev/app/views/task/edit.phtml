@@ -1,0 +1,56 @@
+<?php echo $this->getContent(); ?>
+
+<?php echo $this->tag->form("task/save") ?>
+
+<table width="100%">
+    <tr>
+        <td align="left"><?php echo $this->tag->linkTo(array("task", "Back")) ?></td>
+        <td align="right"><?php echo $this->tag->submitButton("Save") ?></td>
+    </tr>
+</table>
+
+<div align="center">
+    <h1>Edition Tache</h1>
+</div>
+
+<table>
+    <tr>
+        <td align="right">
+            <label for="title">Titre</label>
+        </td>
+        <td align="left">
+            <?php echo $this->tag->textField(array("title", "size" => 30)) ?>
+        </td>
+    </tr>
+    <tr>
+        <td align="right">
+            <label for="content">Description</label>
+        </td>
+        <td align="left">
+            <?php echo $this->tag->textField(array("content", "size" => 254)) ?>
+        </td>
+    </tr>
+    <tr>
+        <td align="right">
+            <label for="cost">Cout</label>
+        </td>
+        <td align="left">
+            <?php echo $this->tag->numericField(array("cost", "value">0)) ?>
+        </td>
+    </tr>
+	<tr>
+        <td align="right">
+            <label for="status">Statut</label>
+        </td>
+        <td align="left">
+            <?php echo $this->tag->textField(array("status", "size"=>10)) ?>
+        </td>
+    </tr>
+	
+    <tr>
+        <td><?php echo $this->tag->hiddenField("id_task") ?></td>
+        <td><?php echo $this->tag->submitButton("Save") ?></td>
+    </tr>
+</table>
+
+</form>
