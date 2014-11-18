@@ -7,6 +7,10 @@
         <td align="left"><?php echo $this->tag->linkTo(array("sprint/index", "Retour", "class"=>"btn")); ?></td>
         <td align="right"><?php echo $this->tag->linkTo(array("sprint/edit/".$sprint->id_sprint, "Modifier", "class"=>"btn")); ?></td>
     </tr>
+    <tr>
+    	<td align="left"></td>
+    	<td align="right"><?php echo $this->tag->linkTo(array("task/index", "Tâches", "class"=>"btn")); ?></td>
+    </tr>
 </table>
 
 <h1><?php echo "Sprint ",$sprint->number ?></h1>
@@ -38,3 +42,4 @@
 <?php } else { 
     $this->flash->error("Vous devez être connecté pour avoir accès à cette page.");
 } ?>
+
