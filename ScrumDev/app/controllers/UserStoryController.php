@@ -5,23 +5,6 @@ use Phalcon\Paginator\Adapter\Model as Paginator;
 
 class UserStoryController extends ControllerBase
 {
-
-    /**
-     * Index action
-     */
-    public function indexAction()
-    {
-        
-    }
-	
-    /**
-     * Displayes the creation form
-     */
-    public function newAction()
-    {
-	
-    }
-
     /**
      * Edits a us
      *
@@ -86,7 +69,7 @@ class UserStoryController extends ControllerBase
         return $this->dispatcher->forward(array(
             "controller" => "backlog",
             "action" => "create",
-			"params" => array(1, $us->id_us)
+			"params" => array($this->session->get('id_proj'), $us->id_us)
         ));
 
     }

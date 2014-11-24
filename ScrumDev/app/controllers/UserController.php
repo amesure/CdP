@@ -69,7 +69,6 @@ class UserController extends ControllerBase
      */
     public function editAction($id_user)
     {
-
         if (!$this->request->isPost()) {
 
             $user = User::findFirstByid_user($id_user);
