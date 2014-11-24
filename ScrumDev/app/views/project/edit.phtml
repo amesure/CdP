@@ -1,10 +1,8 @@
 <?php echo $this->getContent(); ?>
 
-<?php if ($this->session->has('auth')){?>
-
 <table width="100%">
     <tr>
-        <td align="left"><?php echo $this->tag->linkTo(array("project", "Retour", "class" => "btn")) ?></td>
+        <td align="left"><?php echo $this->tag->linkTo(array("project/show/".$id_project, "Retour", "class" => "btn")) ?></td>
         <td align="right"><?php echo $this->tag->submitButton(array("Valider", "class" => "btn")) ?></td>
     </tr>
 </table>
@@ -45,7 +43,3 @@
         </tr>
     </table>
 </form>
-
-<?php } else { 
-    $this->flash->error("Vous devez être connecté pour avoir accès à cette page.");
-} ?>

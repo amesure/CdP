@@ -12,15 +12,21 @@ class SprintController extends ControllerBase
     public function indexAction()
     {
 
-        if ($this->session->has("id_proj")) 
+        if ($this->session->has("id_proj")) {
             $id_proj = $this->session->get("id_proj");
-		
+        } else {
+            $this->flash->error("Vous n'avez pas accès à cette page.");
+            
+            return $this->dispatcher->forward(array(
+                "controller" => "index",
+                "action" => "index"
+            ));
+        }
         $sprints = Sprint::find(array(
             'id_project = '.$id_proj.''
         ));
-		
-		$this->session->remove("id_sprint");
-		
+        
+        $this->session->remove("id_sprint");
         $this->view->setVar('sprint', $sprints);
     }
 
@@ -40,9 +46,7 @@ class SprintController extends ControllerBase
      */
     public function editAction($id_sprint)
     {
-
         if (!$this->request->isPost()) {
-
             $sprint = Sprint::findFirstByid_sprint($id_sprint);
             if (!$sprint) {
                 $this->flash->error("sprint was not found");
@@ -53,9 +57,7 @@ class SprintController extends ControllerBase
                 ));
             }
 
-            $this->tag->setDefault("id_sprint", $sprint->id_sprint);
             $this->tag->setDefault("number", $sprint->number);
-            $this->tag->setDefault("id_project", $sprint->id_project);
             $this->tag->setDefault("begin", $sprint->begin);
             $this->tag->setDefault("end", $sprint->end);
             
@@ -136,7 +138,6 @@ class SprintController extends ControllerBase
         
 
         if (!$sprint->save()) {
-
             foreach ($sprint->getMessages() as $message) {
                 $this->flash->error($message);
             }
@@ -176,7 +177,6 @@ class SprintController extends ControllerBase
         }
 
         if (!$sprint->delete()) {
-
             foreach ($sprint->getMessages() as $message) {
                 $this->flash->error($message);
             }
@@ -212,19 +212,19 @@ class SprintController extends ControllerBase
                 'action' => 'index'
             ));
         }
-		$this->session->set("id_sprint", $id);
-		
+        $this->session->set("id_sprint", $id);
+        
         $prog = "";
         $date = date("Y-m-d");
-        if ($date < $sprint->begin)
+        if ($date < $sprint->begin) {
             $prog = "Débutera le ".$sprint->begin;
-        elseif($date < $sprint->end)
+        } elseif ($date < $sprint->end) {
             $prog = "En cours";
-        else 
+        } else {
             $prog = "Fini";
-
+        }
 
         $this->view->setVar('sprint', $sprint);
-        $this->view->setVar('prog',$prog);
+        $this->view->setVar('prog', $prog);
     }
 }

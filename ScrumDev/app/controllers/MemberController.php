@@ -49,7 +49,7 @@ class MemberController extends ControllerBase
     {
 		
 		$member= Member::findFirstByid_member($idmember);
-		$member->type=1;
+		$member->status=1;
 		if (!$member->save()) {
 
             foreach ($project->getMessages() as $message) {
@@ -70,7 +70,7 @@ class MemberController extends ControllerBase
 			$member=new Member();
 			$member->id_user=$id_user;
 			$member->id_project=$this->session->get("idproj");
-			$member->type=2;
+			$member->status=2;
 			if (!$member->save()) {
             foreach ($member->getMessages() as $message) {
                 $this->flash->error($message);
@@ -93,7 +93,7 @@ class MemberController extends ControllerBase
 			$member=new Member();
 			$member->id_user=$this->session->get('auth');
 			$member->id_project=$project->id_project;
-			$member->type=3;
+			$member->status=3;
 			if (!$member->save()) {
             foreach ($member->getMessages() as $message) {
                 $this->flash->error($message);
@@ -112,7 +112,7 @@ class MemberController extends ControllerBase
 		
 		public function myprojectAction()
 		{
-		$numberPage=1;
+		$numberPage=$this->request->getQuery("page", "int");
 	 
         $member=Member::query()->where("Member.id_user = :user:")
 		->bind(array("user" => $this->session->get("auth")))
@@ -129,4 +129,6 @@ class MemberController extends ControllerBase
 		}
 
 }
+
+
 ?>

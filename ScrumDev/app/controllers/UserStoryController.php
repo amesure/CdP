@@ -11,7 +11,20 @@ class UserStoryController extends ControllerBase
      */
     public function indexAction()
     {
+        $numberPage = $this->request->getQuery("page", "int");
+        $us = Backlog::query()->where("Backlog.id_project = :idproj:")
+            ->bind(array("idproj" => $this->session->get("id_proj")))
+            ->join("UserStory")
+            ->execute();
         
+  
+        $paginator = new Paginator(array(
+            "data" => $us,
+            "limit"=> 10,
+            "page" => $numberPage
+        ));
+
+        $this->view->page = $paginator->getPaginate();
     }
 	
     /**

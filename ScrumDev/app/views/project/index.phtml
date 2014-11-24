@@ -1,20 +1,24 @@
 <?php echo $this->getContent(); ?>
 
-<?php if ($this->session->has('auth')){?>
-
 <table width="100%">
     <tr>
-        <td align="left"><?php echo $this->tag->linkTo(array("member/myproject", "Mes projets", "class" => "btn")); ?></td>
-        <td align="right"> <?php echo $this->tag->linkTo(array("project/new", "Nouveau projet", "class" => "btn")) ?></td>
+        <td align="left">
+            <?php echo $this->tag->linkTo(array("member/myproject", "Mes projets", "class" => "btn")); ?>
+        </td>
+        <td align="right">
+            <?php echo $this->tag->linkTo(array("project/new", "Nouveau projet", "class" => "btn")) ?>
+        </td>
     </tr>
 </table>
 
+<div><h1>Projets</h1><br/></div>
 
-<table class="browse" align="center">
+<table class="table" style="width:80% !important">
 	<thead>
 		<tr>
-			<th>Titre projet</th>
+			<th>Intitulé</th>
 			<th>Description</th>
+            <th></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -27,24 +31,13 @@
 		</tr>
 	<?php } ?>
 	</tbody>
-	<tbody>
-		<tr>
-			<td colspan="2" align="right">
-				<table align="center">
-					<tr>
-						<td><?php echo $this->tag->linkTo("project/index", "Début") ?></td>
-						<td><?php echo $this->tag->linkTo("project/index?page=" . $page->before, "Précédent") ?></td>
-						<td><?php echo $this->tag->linkTo("project/index?page=" . $page->next, "Suivant") ?></td>
-						<td><?php echo $this->tag->linkTo("project/index?page=" . $page->last, "Fin") ?></td>
-						<td><?php echo $page->current, "/", $page->total_pages ?></td>
-					</tr>
-				</table>
-			</td>
-		</tr>
-	</tbody>
 </table>
-
-
-<?php } else { 
-    $this->flash->error("Vous devez être connecté pour avoir accès à cette page.");
-} ?>
+<table width="10%">
+    <tr>
+	   <td><?php echo $this->tag->linkTo("project/index", "First") ?></td>
+        <td><?php echo $this->tag->linkTo("project/index?page=" . $page->before, "Previous") ?></td>
+	   <td><?php echo $this->tag->linkTo("project/index?page=" . $page->next, "Next") ?></td>
+		<td><?php echo $this->tag->linkTo("project/index?page=" . $page->last, "Last") ?></td>
+    </tr>
+</table>
+<?php echo $page->current, "/", $page->total_pages ?>
