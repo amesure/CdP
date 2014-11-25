@@ -1,7 +1,5 @@
 <?php echo $this->getContent(); ?>
 
-<?php if ($this->session->has('auth')){?>
-
 <table width="100%">
     <tr>
         <td align="left"><?php echo $this->tag->linkTo(array("project", "Retour", "class"=>"btn")) ?></td>
@@ -45,7 +43,3 @@
         </tr>
     </table>
 </form>
-
-<?php } else { 
-    $this->flash->error("Vous devez être connecté pour avoir accès à cette page.");
-} ?>

@@ -37,7 +37,9 @@ class Project extends \Phalcon\Mvc\Model
      */
     public function initialize()
     {
-	 $this->hasMany("id_project", "member", "id_project");
+        $this->hasMany("id_project", "member", "id_project");
+        $this->hasMany("id_project", "sprint", "id_project");
+        $this->hasMany("id_project", "userstory", "id_project");
 
     }
 

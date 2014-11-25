@@ -24,7 +24,7 @@
 			<tr>
 				<td><?php echo $member->user->login ?></td>
 				<td><?php 
-				switch($member->type){
+				switch($member->status){
 					case 0:
 						echo "ScrumMaster";
 						break;
@@ -41,7 +41,7 @@
 				?></td>
 				<td><?php if($this->session->get("perm")==0){ 
 				
-				switch($member->type){
+				switch($member->status){
 					
 					case 1:
 						echo $this->tag->linkTo(array("member/fire/".$member->id_member, "retirer"));

@@ -11,31 +11,11 @@ class BacklogController extends ControllerBase
      */
     public function indexAction()
     {
-        $numberPage = 1;
-        if ($this->request->isPost()) {
-            $query = Criteria::fromInput($this->di, "backlog", $_POST);
-            $this->persistent->parameters = $query->getParams();
-        } else {
-            $numberPage = $this->request->getQuery("page", "int");
-        }
+		$backlog = UserStory::query()->join('backlog', 'b.id_us = UserStory.id_us', 'b')
+			->where('b.id_project = :id_pro:')->bind(array("id_pro" => $this->session->get('id_proj')))->execute();
+        //$backlog = Backlog::query()->where('id_project = :id_pro:')->bind(array("id_pro" => $this->session->get('id_proj')))->execute();
 
-        $parameters = $this->persistent->parameters;
-        if (!is_array($parameters)) {
-            $parameters = array();
-        }
-        $parameters["where"] = "id_project = :id_pro:";
-		// Changer 1 par l'id du projet que l'on recherche
-		$parameters["bind"]  = array("id_pro" => 1);
-
-        $backlog = Backlog::find($parameters);
-
-        $paginator = new Paginator(array(
-            "data" => $backlog,
-            "limit"=> 10,
-            "page" => $numberPage
-        ));
-
-        $this->view->page = $paginator->getPaginate();
+        $this->view->page = $backlog;
     }
 
     /**

@@ -31,7 +31,7 @@ class Member extends \Phalcon\Mvc\Model
 	* 2= invitation envoyé
 	* 3= demande pour rejoindre le projet
 	*/
-	public $type;
+	public $status;
     /**
      * Initializer method for model.
      */

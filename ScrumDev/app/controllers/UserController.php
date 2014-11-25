@@ -69,7 +69,6 @@ class UserController extends ControllerBase
      */
     public function editAction($id_user)
     {
-
         if (!$this->request->isPost()) {
 
             $user = User::findFirstByid_user($id_user);
@@ -244,6 +243,7 @@ class UserController extends ControllerBase
             if ($user) {
                 if($password === $user->password) {
                 //if($this->security->checkHash($password,$user->password)) {
+                    $this->session->set('role', 'User');
                     $this->session->set('auth', $user->id_user);
                     $this->flash->success("Vous vous êtes correctement connecté.");
                     return $this->dispatcher->forward(array(
@@ -274,6 +274,8 @@ class UserController extends ControllerBase
     public function logoutAction()
     {
         $this->session->remove('auth');
+        $this->session->set('role', 'Guest');
+         echo $this->session->get('role');
         return $this->dispatcher->forward(array(
             'controller' => 'index',
             'action' => 'index'

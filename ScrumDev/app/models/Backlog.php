@@ -10,7 +10,7 @@ class Backlog extends \Phalcon\Mvc\Model
      * @var integer
      *
      */
-    public $id;
+    public $id_backlog;
 
     /**
      * @var integer
@@ -29,7 +29,8 @@ class Backlog extends \Phalcon\Mvc\Model
      */
     public function initialize()
     {
-
+        $this->hasMany("id_project", "project", "id_project");
+        $this->hasMany("id_us", "userstory", "id_us");
     }
 
 

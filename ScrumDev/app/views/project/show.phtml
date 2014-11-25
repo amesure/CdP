@@ -1,40 +1,97 @@
 <?php echo $this->getContent(); ?>
 
-<?php if ($this->session->has('auth')){?>
+<?php /*if ($this->session->has('auth')){*/?>
+
 
 <table width="100%">
     <tr>
-        <td align="left"><?php echo $this->tag->linkTo(array("project/index", "Retour", "class"=>"btn")); ?></td>
+        <td align="left">
+            <?php echo $this->tag->linkTo(array("project/index", "Retour", "class"=>"btn")); ?>
+        </td>
+        <td align="right">
+            <?php echo $this->tag->linkTo(array("member/inscription/".$project->id_project, "Postuler", "class"=>"btn")); ?>
+        </td>
+    </tr>
+    <tr>
+        <td align="left"><?php echo $this->tag->linkTo(array("member/index", "Liste Membres", "class"=>"btn")); ?></td>
+        <td align="right">
+            <?php echo $this->tag->linkTo(array("project/edit/" . $project->id_project, "Modifier", "class"=>"btn")); ?>
+        </td>
     </tr>
 </table>
 
+<header>
+    <h1>Description du projet</h1>
+    <h2> <?php echo $project->title ?> </h2>
+</header>
 
-<table>
-    <tr>
-        <td align="right">
-            <label for="title">Title</label>
-        </td>
-        <td align="left">
-            <?php echo $project->title ?>
-        </td>
-    </tr>
-    <tr>
-        <td align="right">
-            <label for="content">Content</label>
-        </td>
-        <td align="left">
-            <?php echo $project->content ?>
-        </td>
-    </tr>
 
-    <tr>
-		<td><?php echo $this->tag->linkTo(array("member/inscription".$project->id_project, "Postuler")); ?></td>
-        <td><?php echo $this->tag->linkTo(array("backlog/index", "Backlog")); ?></td>
-		<td><?php echo $this->tag->linkTo(array("member/index", "Liste Membres")); ?></td>
-		<td><?php echo $this->tag->linkTo(array("project/edit/" . $project->id_project, "edition")); ?></td>
-    </tr>
-</table>
+<div align="left" style="margin-left:5%">
+    <h3> Description: </h3>
+    <p style="margin-left:20px">
+        <?php echo $project->content ?>
+    </p>
+</div>
 
-<?php } else { 
+<div align="left" style="margin-left:5%">
+    <h3>Liste des membres: </h3>
+    <p>
+        <table style="width:40%; margin-left:20px">
+            <?php foreach($project->member as $member){ ?>
+                <tr>
+                    <td><?php echo $member->user->login ?></td>
+                    <td><?php 
+                        switch($member->status){
+                            case 0:
+                                echo "ScrumMaster";
+                                break;
+                            case 1:
+                                echo "Membre";
+                                break;
+                            case 2:
+                                echo "Invitation envoyé";
+                                break;
+                            case 3 :
+                                echo "En attente";
+                                break;
+                        }
+                    ?></td>
+                    <td><?php if($this->session->get("perm")==0){ 
+                        switch($member->status){
+                            case 1:
+                                echo $this->tag->linkTo(array("member/fire/".$member->id_member, "retirer"));
+                                break;
+                            case 2:
+                                echo $this->tag->linkTo(array("member/fire/".$member->id_member, "retirer"));
+                                break;
+                            case 3 :
+                                echo $this->tag->linkTo(array("member/accept/".$member->id_member, "accepter"));
+                                echo $this->tag->linkTo(array("member/fire/".$member->id_member, "refuser"));
+                                break;
+                        }
+                    } ?> </td>
+                </tr>
+            <?php } ?>
+        </table>
+    </p>
+</div>
+
+<div align="left" style="margin-left:5%">
+    <h3>Etat du projet: </h3>
+    <p style="margin-left:20px">
+        <table style="width:40%; margin-left:20px">
+            <?php foreach($project->sprint as $sprint){ ?>
+                <tr>
+                    <td><?php echo "Sprint ".$sprint->number; ?></td>
+                    <td><?php echo "du ".$sprint->begin; ?></td>
+                    <td><?php echo "au ".$sprint->end; ?></td>
+                </tr>
+            <?php } ?>
+        </table>
+    </p>
+</div>
+
+
+<?php /*} else { 
     $this->flash->error("Vous devez être connecté pour avoir accès à cette page.");
-} ?>
+} */?>

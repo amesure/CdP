@@ -38,6 +38,7 @@ class UserStory extends \Phalcon\Mvc\Model
     public function initialize()
     {
          $this->hasMany("id_us", "SprintUs", "id_us");
+        $this->belongsTo("id_project", "project", "id_project");
     }
 
 

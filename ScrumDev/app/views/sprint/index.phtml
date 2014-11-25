@@ -1,9 +1,19 @@
-<?php echo $this->getContent() ?>
+<?php echo $this->getContent()?>
 
-<?php if ($this->session->has('auth')){?>
+<?php if ($this->session->has('auth')) { ?>
 
+<table width="100%">
+    <tr>
+        <td align="left">
+            <?php echo $this->tag->linkTo(array("sprint", "Retour", "class"=>"btn")) ?>
+        </td>
+        <td align="right">
+            <?php echo $this->tag->linkTo(array("sprint/new", "Nouveau sprint", "class" => "btn")) ?>
+        </td>
+    </tr>
+</table>
 <div align="right">
-    <?php echo $this->tag->linkTo(array("sprint/new", "Nouveau sprint", "class" => "btn")) ?>
+    
 </div>
 
 <h1>Sprints</h1>

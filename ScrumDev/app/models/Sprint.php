@@ -37,6 +37,7 @@ class Sprint extends \Phalcon\Mvc\Model
     {
         $this->hasMany("id_sprint", "SprintUs", "id_sprint");
         $this->hasMany("id_sprint", "SprintTask", "id_sprint");
+        $this->belongsTo("id_project","Project", "id_project");
     }
 
 
