@@ -52,7 +52,6 @@ class TaskController extends ControllerBase
 		$task->title = $this->request->getPost("title");
 		$task->content = $this->request->getPost("content");
 		$task->cost = $this->request->getPost("cost");
-		$task->status = $this->request->getPost("status");
 		$task->id_sprint = $this->session->get("id_sprint");
 		
 		if(!$task->save()){
@@ -95,7 +94,6 @@ class TaskController extends ControllerBase
             $this->tag->setDefault("title", $task->title);
             $this->tag->setDefault("content", $task->content);
             $this->tag->setDefault("cost", $task->cost);
-            $this->tag->setDefault("status", $task->status);
         }
 	}
 	
@@ -121,7 +119,6 @@ class TaskController extends ControllerBase
 		$task->title = $this->request->getPost("title");
 		$task->content = $this->request->getPost("content");
 		$task->cost = $this->request->getPost("cost");
-		$task->status = $this->request->getPost("status");
 		if (!$task->save()) {
             foreach ($task->getMessages() as $message) {
                 $this->flash->error($message);
@@ -154,6 +151,11 @@ class TaskController extends ControllerBase
                 "action" => "index"
             ));
         }
+		$deps = Dependancy::query()->where("id_task1 = :id_task: OR id_task2 = :id_task:")->bind(array("id_task"=>$id_task))->execute();
+		if($deps){
+			foreach($deps as $dep)
+				$dep->delete();
+		}
 		if(!$task->delete()){
 			foreach ($task->getMessages() as $message) {
                 $this->flash->error($message);
@@ -182,10 +184,11 @@ class TaskController extends ControllerBase
 		$this->view->id_task = $id_task;
 		$this->tag->setDefault("id_task", $id_task);
 		
-		/*$deps = Dependancy::query()->where("id_task1 = :id_task:")->bind(array("id_task"=>$id_task))->execute();
-		foreach($deps as $dep){
-			
-		}*/
+		$deps = Dependancy::query()->where("id_task1 = :id_task:")->bind(array("id_task"=>$id_task))->execute();
+		if($deps){
+			foreach($deps as $dep)
+				$dep->delete();
+		}
 	}
 	
 	/**
@@ -198,12 +201,28 @@ class TaskController extends ControllerBase
 			echo $id_task;
 			echo $id_dep;
 			if($id_dep){
-				$dep = new Dependancy();
-				$dep->id_task1 = $id_task;
-				$dep->id_task2 = $id_dep;
-				if(!$dep->save()){
-					foreach ($dep->getMessages() as $message) {
-						$this->flash->error($message);
+				$bool = false;
+				$deps = Dependancy::query()->where("id_task1 = :id_task: AND id_task2 = :id_dep:")->bind(array("id_task"=>$id_dep, "id_dep"=>$id_task))->execute();
+				foreach($deps as $dep){
+					if(!$bool && $dep){
+						$bool = true;
+					}
+				}
+				if($bool){
+					return $this->dispatcher->forward(array(
+						"controller" => "task",
+						"action" => "dependancy",
+						"params" => array($id_task)
+					));
+				}
+				else{
+					$dep = new Dependancy();
+					$dep->id_task1 = $id_task;
+					$dep->id_task2 = $id_dep;
+					if(!$dep->save()){
+						foreach ($dep->getMessages() as $message) {
+							$this->flash->error($message);
+						}
 					}
 				}
 			}

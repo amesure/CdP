@@ -10,21 +10,12 @@ class BacklogController extends ControllerBase
      * Index action
      */
     public function indexAction()
-    {   
-        $numberPage = $this->request->getQuery("page", "int");
-        $us = Backlog::query()->where("Backlog.id_project = :idproj:")
-            ->bind(array("idproj" => $this->session->get("id_proj")))
-            ->join("UserStory")
-            ->execute();
-        
-        $paginator = new Paginator(array(
-            "data" => $us,
-            "limit"=> 10,
-            "page" => $numberPage
-        ));
+    {
+		$backlog = UserStory::query()->join('backlog', 'b.id_us = UserStory.id_us', 'b')
+			->where('b.id_project = :id_pro:')->bind(array("id_pro" => $this->session->get('id_proj')))->execute();
+        //$backlog = Backlog::query()->where('id_project = :id_pro:')->bind(array("id_pro" => $this->session->get('id_proj')))->execute();
 
-        $this->view->page = $paginator->getPaginate();
-
+        $this->view->page = $backlog;
     }
 
     /**

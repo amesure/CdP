@@ -7,35 +7,6 @@ class UserStoryController extends ControllerBase
 {
 
     /**
-     * Index action
-     */
-    public function indexAction()
-    {
-        $numberPage = $this->request->getQuery("page", "int");
-        $us = Backlog::query()->where("Backlog.id_project = :idproj:")
-            ->bind(array("idproj" => $this->session->get("id_proj")))
-            ->join("UserStory")
-            ->execute();
-        
-  
-        $paginator = new Paginator(array(
-            "data" => $us,
-            "limit"=> 10,
-            "page" => $numberPage
-        ));
-
-        $this->view->page = $paginator->getPaginate();
-    }
-	
-    /**
-     * Displayes the creation form
-     */
-    public function newAction()
-    {
-	
-    }
-
-    /**
      * Edits a us
      *
      * @param string $id_us
@@ -99,7 +70,7 @@ class UserStoryController extends ControllerBase
         return $this->dispatcher->forward(array(
             "controller" => "backlog",
             "action" => "create",
-			"params" => array(1, $us->id_us)
+			"params" => array($this->session->get('id_proj'), $us->id_us)
         ));
 
     }
