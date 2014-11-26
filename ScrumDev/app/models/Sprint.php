@@ -35,10 +35,7 @@ class Sprint extends \Phalcon\Mvc\Model
 
     public function initialize()
     {
-        $this->hasMany("id_sprint", "SprintUs", "id_sprint");
-        $this->hasMany("id_sprint", "SprintTask", "id_sprint");
-        $this->belongsTo("id_project","Project", "id_project");
+        $this->hasMany("id_sprint", "Task", "id_sprint");
+        $this->belongsTo("id_project", "Project", "id_project");
     }
-
-
 }

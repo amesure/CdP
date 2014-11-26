@@ -37,13 +37,13 @@ class User extends \Phalcon\Mvc\Model
      */
     public function initialize()
     {
-		$this->hasMany("id_user", "member", "id_user");
+        $this->hasMany("id_user", "member", "id_user");
         $this->hasMany("id_user", "task", "id_user");
     }
 
 
     /**
-     * Test during the creation if the login and the email address 
+     * Test during the creation if the login and the email address
      * is unique.
      */
     public function validation()
@@ -90,6 +90,4 @@ class User extends \Phalcon\Mvc\Model
         }
         
     }
-
-
 }

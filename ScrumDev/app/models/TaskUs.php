@@ -26,5 +26,4 @@ class TaskUs extends \Phalcon\Mvc\Model
         $this->belongsTo("id_task", "task", "id_task");
         $this->belongsTo("id_us", "userstory", "id_us");
     }
-
 }

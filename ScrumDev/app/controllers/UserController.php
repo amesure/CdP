@@ -70,7 +70,6 @@ class UserController extends ControllerBase
     public function editAction($id_user)
     {
         if (!$this->request->isPost()) {
-
             $user = User::findFirstByid_user($id_user);
             if (!$user) {
                 $this->flash->error("user was not found");
@@ -166,7 +165,6 @@ class UserController extends ControllerBase
         
 
         if (!$user->save()) {
-
             foreach ($user->getMessages() as $message) {
                 $this->flash->error($message);
             }
@@ -206,7 +204,6 @@ class UserController extends ControllerBase
         }
 
         if (!$user->delete()) {
-
             foreach ($user->getMessages() as $message) {
                 $this->flash->error($message);
             }
@@ -234,14 +231,13 @@ class UserController extends ControllerBase
        
 
         if ($this->request->isPost()) {
-
             $login = $this->request->getPost("login");
             $password = $this->request->getPost("password");
 
             $user = User::findFirstByLogin($login);
 
             if ($user) {
-                if($password === $user->password) {
+                if ($password === $user->password) {
                 //if($this->security->checkHash($password,$user->password)) {
                     $this->session->set('role', 'User');
                     $this->session->set('auth', $user->id_user);
@@ -255,7 +251,7 @@ class UserController extends ControllerBase
                     return $this->dispatcher->forward(array(
                         'controller' => 'user',
                         'action' => 'index'
-                ));
+                    ));
                 }
             } else {
                  $this->flash->error("Cet utilisateur n'existe pas.");
@@ -264,7 +260,7 @@ class UserController extends ControllerBase
                     'action' => 'index'
                 ));
             }
-        }    
+        }
     }
 
     /**
@@ -281,5 +277,4 @@ class UserController extends ControllerBase
             'action' => 'index'
         ));
     }
-
 }

@@ -1,5 +1,5 @@
 <?php
- 
+
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\Model as Paginator;
 
@@ -15,49 +15,52 @@ class ProjectController extends ControllerBase
 
         $numberPage = $this->request->getQuery("page", "int");
         $project = Project::query()->where("Project.access=1")->execute();
-        
+
         $paginator = new Paginator(array(
             "data" => $project,
             "limit"=> 10,
             "page" => $numberPage));
-        
+
         $this->view->page = $paginator->getPaginate();
-        
+
         $this->session->remove('id_proj');
-		$this->session->remove('perm');
-        if ($this->session->get('auth')) { 
-            $this->session->set('role','User');
+        $this->session->remove('perm');
+        if ($this->session->get('auth')) {
+            $this->session->set('role', 'User');
         }
     }
-    
-    
-    
-	public function showAction($id_project)
-	{
+
+
+
+    public function showAction($id_project)
+    {
         $this->checkAccess("show", $id_project);
 
-		$project=Project::findFirstByid_project($id_project);
-		$member = Member::query()
-		->where("id_project = :idpro:")
-		->andWhere("id_user=:iduser:")
-		->bind(array("idpro" => $id_project,"iduser"=>$this->session->get("auth")))
-		->execute();
-            
+        $project=Project::findFirstByid_project($id_project);
+        $member = Member::query()
+            ->where("id_project = :idpro:")
+            ->andWhere("id_user=:iduser:")
+            ->bind(array("idpro" => $id_project,"iduser"=>$this->session->get("auth")))
+            ->execute();
+
         $this->session->set('id_proj', $project->id_project);
 
-		if ($member->count() > 0) {
-            $this->session->set('perm', $member->getFirst()->status);
-            if ($member->getFirst()->status == 0)
+        if ($member->count() > 0) {
+            $status = $member->getFirst()->status;
+            $this->session->set('perm', $status);
+            if ($status == 0) {
                 $this->session->set('role', "ScrumMaster");
-            if ($member->getFirst()->status == 1)
+            }
+            if ($status == 1) {
                 $this->session->set('role', "Member");
+            }
         }
 
-		$this->view->member=$member;
-		$this->view->project=$project;
-        
+        $this->view->member=$member;
+        $this->view->project=$project;
+
         $project=Project::findFirstByid_project($id_project);
-	}
+    }
 
     /**
      * Searches for project
@@ -115,22 +118,21 @@ class ProjectController extends ControllerBase
     {
         $this->checkAccess("edit", $id_project);
 
-		$member = Member::findFirst(array(
-            'id_user = ?0 and id_project = ?1', 
+        $member = Member::findFirst(array(
+            'id_user = ?0 and id_project = ?1',
             'bind' => array(
                 $this->session->get("auth"),
                 $id_project)
         ));
-		
+
         if (!$member) {
             return $this->dispatcher->forward(array(
                 "controller" => "project",
                 "action" => "index"
             ));
         }
-		
-        if (!$this->request->isPost()) {
 
+        if (!$this->request->isPost()) {
             $project = Project::findFirstByid_project($id_project);
             if (!$project) {
                 $this->flash->error("project was not found");
@@ -147,7 +149,7 @@ class ProjectController extends ControllerBase
             $this->tag->setDefault("title", $project->title);
             $this->tag->setDefault("content", $project->content);
             $this->tag->setDefault("access", $project->access);
-            
+
         }
     }
 
@@ -156,7 +158,7 @@ class ProjectController extends ControllerBase
      */
     public function createAction()
     {
-
+        
         if (!$this->request->isPost()) {
             $this->flash->error("Vous n'avez pas accès à cette page.");
             return $this->dispatcher->forward(array(
@@ -166,31 +168,34 @@ class ProjectController extends ControllerBase
         }
 
         $project = new Project();
-		$member= new Member();
-
         $project->title = $this->request->getPost("title");
         $project->content = $this->request->getPost("content");
         $project->access = $this->request->getPost("access");
-
         if (!$project->save()) {
             foreach ($project->getMessages() as $message) {
                 $this->flash->error($message);
             }
-
             return $this->dispatcher->forward(array(
                 "controller" => "project",
                 "action" => "new"
             ));
         }
-		
-		$member->id_project=$project->id_project;
-		$member->id_user=$this->session->get('auth');
-		$member->type=0;
-		
-		$member->save();
-		
-        $this->flash->success("Le projet a été créé");
 
+        $member= new Member();
+        $member->id_project=$project->id_project;
+        $member->id_user=$this->session->get('auth');
+        $member->status=0;
+        if (!$member->save()) {
+            foreach ($member->getMessages() as $message) {
+                $this->flash->error($message);
+            }
+            return $this->dispatcher->forward(array(
+                "controller" => "project",
+                "action" => "new"
+            ));
+        }
+
+        $this->flash->success("Le projet a été créé");
         return $this->dispatcher->forward(array(
             "controller" => "project",
             "action" => "index"
@@ -225,7 +230,7 @@ class ProjectController extends ControllerBase
         $project->title = $this->request->getPost("title");
         $project->content = $this->request->getPost("content");
         $project->access = $this->request->getPost("access");
-        
+
         if (!$project->save()) {
             foreach ($project->getMessages() as $message) {
                 $this->flash->error($message);
@@ -262,7 +267,7 @@ class ProjectController extends ControllerBase
         }
 
         $project = Project::findFirstByid_project($id_project);
-		$member = Member::find(array(' id_project = ?0', 'bind' => array($id_project)));
+        $member = Member::find(array(' id_project = ?0', 'bind' => array($id_project)));
         if (!$project) {
             $this->flash->error("project was not found");
 
@@ -272,7 +277,7 @@ class ProjectController extends ControllerBase
             ));
         }
 
-		if (!$member->delete()) {
+        if (!$member->delete()) {
             foreach ($project->getMessages() as $message) {
                 $this->flash->error($message);
             }
@@ -282,7 +287,7 @@ class ProjectController extends ControllerBase
                 "action" => "search"
             ));
         }
-		
+
         if (!$project->delete()) {
             foreach ($project->getMessages() as $message) {
                 $this->flash->error($message);
@@ -312,7 +317,7 @@ class ProjectController extends ControllerBase
             "ScrumMaster" => array("index", "create", "new", "show", "edit", "delete")
             );
 
-        if (array_search($action,$access[$role]) === false) {
+        if (array_search($action, $access[$role]) === false) {
             $this->flash->error("Vous n'avez pas accès à cette page.");
 
             return $this->dispatcher->forward(array(

@@ -5,8 +5,6 @@ class IndexController extends ControllerBase
 
     public function indexAction()
     {
-    	$this->session->remove('id_proj');
+        $this->session->remove('id_proj');
     }
-
 }
-

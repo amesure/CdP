@@ -62,13 +62,9 @@ class Project extends \Phalcon\Mvc\Model
             'message' => 'Ce titre est déjà utilisé.'
         ]));
 
-
-
         if ($this->validationHasFailed() == true) {
             return false;
         }
         
     }
-
-
 }
