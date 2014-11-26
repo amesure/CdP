@@ -37,7 +37,8 @@ class User extends \Phalcon\Mvc\Model
      */
     public function initialize()
     {
-		$this->hasMany("id", "member", "id_user");
+		$this->hasMany("id_user", "member", "id_user");
+        $this->hasMany("id_user", "task", "id_user");
     }
 
 

@@ -6,7 +6,7 @@ class Task extends \Phalcon\Mvc\Model
 	/**
      * @var integer
      */
-    public $id;
+    public $id_task;
 
     /**
      * @var integer
@@ -43,6 +43,11 @@ class Task extends \Phalcon\Mvc\Model
      */
     public function initialize()
     {
+        $this->hasMany("id_task", "dependancy", "id_task1");
+        $this->hasMany("id_task", "dependancy", "id_task2");
+        $this->hasMany("id_task", "taskus", "id_task");
+        $this->belongsTo("id_user", "user", "id_user");
+        $this->belongsTo("id_sprint", "sprint", "id_sprint");
 
     }
 

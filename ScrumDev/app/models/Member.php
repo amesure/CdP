@@ -11,7 +11,7 @@ class Member extends \Phalcon\Mvc\Model
      * @var integer
      *
      */
-    public $id_project;
+    public $id_member;
 
     /**
      * @var integer
@@ -23,7 +23,8 @@ class Member extends \Phalcon\Mvc\Model
      * @var integer
      *
      */
-	public $id_member;
+    public $id_project;
+
 	/*
 	*@var integer
 	* 0= Scrummaster
@@ -32,6 +33,7 @@ class Member extends \Phalcon\Mvc\Model
 	* 3= demande pour rejoindre le projet
 	*/
 	public $status;
+
     /**
      * Initializer method for model.
      */
@@ -43,8 +45,7 @@ class Member extends \Phalcon\Mvc\Model
 
 
     /**
-     * Test during the creation if the login and the email address 
-     * is unique.
+     * Tests
      */
     public function validation()
     {

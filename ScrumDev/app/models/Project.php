@@ -26,7 +26,7 @@ class Project extends \Phalcon\Mvc\Model
     public $content;
 
     /**
-     * @var email
+     * @var integer
      *
      */
     public $access;
@@ -45,8 +45,7 @@ class Project extends \Phalcon\Mvc\Model
 
 
     /**
-     * Test during the creation if the login and the email address 
-     * is unique.
+     * Tests
      */
     public function validation()
     {

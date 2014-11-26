@@ -14,10 +14,22 @@ class UserStory extends \Phalcon\Mvc\Model
     public $id_us;
 
     /**
-     * @var string
+     * @var integer
      *
      */
-    public $title;
+    public $id_project;
+
+     /**
+     * @var integer
+     *
+     */
+    public $id_sprint;
+
+    /**
+     * @var integer
+     *
+     */
+    public $number;
 
     /**
      * @var string
@@ -37,7 +49,7 @@ class UserStory extends \Phalcon\Mvc\Model
      */
     public function initialize()
     {
-         $this->hasMany("id_us", "SprintUs", "id_us");
+        $this->hasMany("id_us", "taskus", "id_us");
         $this->belongsTo("id_project", "project", "id_project");
     }
 
