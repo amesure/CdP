@@ -1,0 +1,53 @@
+<?php echo $this->getContent()?>
+
+<?php if ($this->session->has('auth')) { ?>
+
+<table width="100%">
+    <tr>
+        <td align="left">
+            <?php echo $this->tag->linkTo(array("sprint/index", "Retour", "class"=>"btn")) ?>
+        </td>
+    </tr>
+</table>
+<div align="right">
+    
+</div>
+
+<h1>Kanban</h1>
+
+<table class="table" style="width:80% !important">
+    <tr>
+        <th>To do</th>
+        <th>In progress</th>
+        <th>Done</th>
+    </tr>
+	<td>
+    <?php foreach($todo as $task){ ?>
+        <?php echo $task->title ?><br>
+        <?php echo $this->tag->linkTo('task/inprogress/'.$task->id_task, 'do') ?>
+		<hr>
+        
+    <?php } ?>
+	</td>
+	<td>
+    <?php foreach($inprogress as $task){ ?>
+        <?php echo $task->title ?><br>
+		 <?php echo $task->User->login ?><br>
+        <?php echo $this->tag->linkTo('task/done/'.$task->id_task, 'done') ?><br>
+		<hr>
+        
+    <?php } ?>
+	</td>
+	<td>
+    <?php foreach($done as $task){ ?>
+        <?php echo $task->title ?><br>
+		 <?php echo $task->User->login ?><br>
+		<hr>
+        
+    <?php } ?>
+	</td>
+</table>
+
+<?php } else { 
+    $this->flash->error("Vous devez être connecté pour avoir accès à cette page.");
+} ?>

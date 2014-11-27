@@ -227,4 +227,29 @@ class SprintController extends ControllerBase
         $this->view->setVar('sprint', $sprint);
         $this->view->setVar('prog', $prog);
     }
+	
+	public function kanbanAction()
+	{
+		$todo= Task::query()
+            ->where("id_sprint = :sprint:")
+            ->andWhere("status='to do'")
+            ->bind(array("sprint" => $this->session->get("id_sprint")))
+            ->execute();
+		
+		$inprogress=Task::query()
+            ->where("id_sprint = :sprint:")
+            ->andWhere("status='in progress'")
+            ->bind(array("sprint" => $this->session->get("id_sprint")))
+            ->execute();
+		
+		$done=Task::query()
+            ->where("id_sprint = :sprint:")
+            ->andWhere("status='done'")
+            ->bind(array("sprint" => $this->session->get("id_sprint")))
+            ->execute();
+		
+		$this->view->todo=$todo;
+		$this->view->inprogress=$inprogress;
+		$this->view->done=$done;
+	}
 }
