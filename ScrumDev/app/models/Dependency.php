@@ -1,7 +1,7 @@
 <?php
 use Phalcon\Mvc\Model\Validator\PresenceOf as PresenceOf;
 
-class Dependancy extends \Phalcon\Mvc\Model
+class Dependency extends \Phalcon\Mvc\Model
 {
     /**
      * @var integer
