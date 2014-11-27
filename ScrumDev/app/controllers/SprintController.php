@@ -56,11 +56,10 @@ class SprintController extends ControllerBase
                     "action" => "index"
                 ));
             }
-
+            $this->tag->setDefault('idsprint',$id_sprint);
             $this->tag->setDefault("number", $sprint->number);
             $this->tag->setDefault("begin", $sprint->begin);
             $this->tag->setDefault("end", $sprint->end);
-            
         }
     }
 
@@ -118,9 +117,7 @@ class SprintController extends ControllerBase
                 "action" => "index"
             ));
         }
-
-        $id_sprint = $this->request->getPost("id_sprint");
-
+        $id_sprint = $this->request->getPost("idsprint");
         $sprint = Sprint::findFirstByid_sprint($id_sprint);
         if (!$sprint) {
             $this->flash->error("sprint does not exist " . $id_sprint);
