@@ -196,57 +196,100 @@ class TaskController extends ControllerBase
             ->andWhere("id_task <> :id_task:")
             ->bind(array("id_sprint"=>$this->session->get("id_sprint"), "id_task"=>$id_task))
             ->execute();
-        $this->view->page = $task;
+        $i = 0;
+		foreach($task as $t){
+			$td[$i] = new Taskdep();
+			$td[$i]->id_task = $t->id_task;
+            $td[$i]->title = $t->title;
+            $td[$i]->content = $t->content;
+            $td[$i]->cost = $t->cost;
+			$deps = Dependency::query()
+				->where("id_task1 = :id_task:")
+				->andWhere("id_task2 = :id_t2:")
+				->bind(array("id_task"=>$id_task, "id_t2"=>$td[$i]->id_task))
+				->execute();
+			if($deps->count() == 1){
+				$td[$i]->dep = true;
+			}
+			else{
+				$td[$i]->dep = false;
+			}
+			$i += 1;
+		}
+        $this->view->page = $td;
         $this->view->id_task = $id_task;
         $this->tag->setDefault("id_task", $id_task);
-
-        $deps = Dependancy::query()->where("id_task1 = :id_task:")->bind(array("id_task"=>$id_task))->execute();
-        if ($deps) {
-            foreach ($deps as $dep) {
-                $dep->delete();
-            }
-        }
     }
 
     /**
-     * New the dependancies
+     * New dependancies
      */
     public function newdependancyAction()
     {
         $dependancies = $this->request->getPost("dependancy");
         $id_task = $this->request->getPost("id_task");
-        foreach ($dependancies as $id_dep) {
-            echo $id_task;
-            echo $id_dep;
-            if ($id_dep) {
-                $bool = false;
-                $deps = Dependancy::query()
-                    ->where("id_task1 = :id_task: AND id_task2 = :id_dep:")
-                    ->bind(array("id_task"=>$id_dep, "id_dep"=>$id_task))
-                    ->execute();
-                foreach ($deps as $dep) {
-                    if (!$bool && $dep) {
-                        $bool = true;
-                    }
-                }
-                if ($bool) {
-                    return $this->dispatcher->forward(array(
-                        "controller" => "task",
-                        "action" => "dependancy",
-                        "params" => array($id_task)
-                    ));
-                } else {
-                    $dep = new Dependancy();
-                    $dep->id_task1 = $id_task;
-                    $dep->id_task2 = $id_dep;
-                    if (!$dep->save()) {
-                        foreach ($dep->getMessages() as $message) {
-                            $this->flash->error($message);
-                        }
-                    }
-                }
+        /* On récupère les anciennes dépendances qu'on transforme en array */
+		$old_deps = Dependency::query()
+			->where("id_task1 = :id_task:")
+			->bind(array("id_task"=>$id_task))
+			->execute();
+		$old_deps_array = $old_deps->toArray();
+		if($dependancies){
+			/* On ajoute celles qui sont à ajouter en évitant les doublons et double sens */
+			foreach ($dependancies as $id_dep) {
+				$deps = Dependency::query()
+					->where("id_task1 = :id_task: AND id_task2 = :id_dep:")
+					->bind(array("id_task"=>$id_dep, "id_dep"=>$id_task))
+					->execute();
+				/* Vérification non double sens */
+				if ($deps->count() >= 1) {
+					echo "Double sens";
+					return $this->dispatcher->forward(array(
+						"controller" => "task",
+						"action" => "dependancy",
+						"params" => array($id_task)
+					));
+				} else {
+					$deps2 = Dependency::query()
+						->where("id_task1 = :id_dep: AND id_task2 = :id_task:")
+						->bind(array("id_task"=>$id_dep, "id_dep"=>$id_task))
+						->execute();
+					/* Vérification pour éviter les doublons */
+					if($deps2->count() < 1){
+						$dep = new Dependency();
+						$dep->id_task1 = $id_task;
+						$dep->id_task2 = $id_dep;
+						if (!$dep->save()) {
+							foreach ($dep->getMessages() as $message) {
+								$this->flash->error($message);
+							}
+						}
+					} else {
+						echo "La dépendance de la tache " . strval($id_task) . " vers la tache " . strval($id_dep) . " existe déjà";
+					}
+				}
+				/* On supprime de l'array celles qui sont déjà présentent dans les anciennes dépandences */
+				if(count($old_deps_array) > 0){
+					for($i=0; $i<count($old_deps_array); $i++){
+						if($old_deps_array[$i]["id_task2"] == $id_dep){
+							unset($old_deps_array[$i]);
+						}
+					}
+				}
+				/* On remet l'array avec en premier indice 0 */
+				$old_deps_array = array_values($old_deps_array);
             }
         }
+		/* On regarde les dépendances qui restent et on les supprime */
+		if(count($old_deps_array) > 0){
+			for($i=0; $i<count($old_deps_array); $i++){
+				$dep = Dependency::query()
+					->where("id_dependancy = :id_dep:")
+					->bind(array("id_dep"=>$old_deps_array[$i]["id_dependancy"]))
+					->execute();
+				$dep->delete();
+			}
+		}
         return $this->dispatcher->forward(array(
             "controller" => "task",
             "action" => "index"
