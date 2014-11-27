@@ -110,8 +110,6 @@ class UserController extends ControllerBase
 
         $password = $this->request->getPost("password");
         $user->password = $this->request->getPost("password");
-        //$user->password = $this->security->hash($password);
-        //echo $user->password;
         
         if (!$user->save()) {
             foreach ($user->getMessages() as $message) {
@@ -271,7 +269,6 @@ class UserController extends ControllerBase
     {
         $this->session->remove('auth');
         $this->session->set('role', 'Guest');
-         echo $this->session->get('role');
         return $this->dispatcher->forward(array(
             'controller' => 'index',
             'action' => 'index'

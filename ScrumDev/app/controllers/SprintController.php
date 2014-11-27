@@ -196,14 +196,9 @@ class SprintController extends ControllerBase
     }
 
 
-    public function showAction($id)
+    public function showAction($id_sprint)
     {
-        $sprint = Sprint::findFirst(array(
-            'id_sprint = :id:',
-            'bind' => array(
-                'id' => $id
-            )
-        ));
+        $sprint = Sprint::findFirstByid_sprint($id_sprint);
 
         if ($sprint === false) {
             $this->flash->error("Ce sprint na pas été trouvé.");
@@ -212,7 +207,7 @@ class SprintController extends ControllerBase
                 'action' => 'index'
             ));
         }
-        $this->session->set("id_sprint", $id);
+        $this->session->set("id_sprint", $id_sprint);
         
         $prog = "";
         $date = date("Y-m-d");

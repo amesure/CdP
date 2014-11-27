@@ -10,8 +10,7 @@ class UserstoryController extends ControllerBase
      */
     public function indexAction()
     {
-        $id_project = $this->session->get('id_project');
-
+        $id_project = $this->session->get('id_proj');
         $backlog = Userstory::findByid_project($id_project);
         if (!$backlog) {
             $this->flash->error("us was not found");
@@ -74,13 +73,10 @@ class UserstoryController extends ControllerBase
         $us->content = $this->request->getPost("content");
         $us->cost = $this->request->getPost("cost");
 
-        echo $us->number, "</br>", $us->content, "</br>",$us->cost, "</br>", $us->id_project, "</br>",$us->id_sprint ;
-
         if (!$us->save()) {
             foreach ($us->getMessages() as $message) {
                 $this->flash->error($message);
             }
-            echo 1;
             return $this->dispatcher->forward(array(
                 "controller" => "userstory",
                 "action" => "new"
