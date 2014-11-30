@@ -1,0 +1,53 @@
+<?php echo $this->getContent();?>
+
+<?php if ($this->session->has('auth')){?>
+
+<?php echo $this->tag->form("sprint/saveAssign") ?>
+
+<table width="100%">
+    <tr>
+        <td align="left"><?php echo $this->tag->linkTo(array("project/index", "Retour", "class"=>"btn")); ?></td>
+        <td align="right"><?php echo $this->tag->submitButton(array("Sauvegarder", "class"=>"btn")) ?></td>
+    </tr>
+</table>
+
+
+
+<table class="table" style="width:80% !important">
+    <thead>
+        <tr>
+        	<td></td>
+            <td><?php echo "#"; ?></td>
+            <td><?php echo "Contenu"; ?></td>
+            <td><?php echo "Coût"; ?></td>
+        </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($userstories as $us) { ?>
+		<tr>
+			<td><?php 
+				if($us->id_sprint == $id_sprint) {
+					echo $this->tag->checkField(array(
+						"assign[]",
+						"value" => $us->id_us,
+						"checked"=>"checked"
+					));
+				} else {
+					echo $this->tag->checkField(array(
+						"assign[]",
+						"value" => $us->id_us
+					));
+				}
+			?></td>	
+			<td><?php echo "US",$us->number ?></td>
+			<td><?php echo $us->content ?></td>
+			<td><?php echo $us->cost ?></td>
+			
+		</tr>
+	<?php } ?>
+    </tbody>
+</table>
+
+<?php } else { 
+    $this->flash->error("Vous devez être connecté pour avoir accès à cette page.");
+} ?>

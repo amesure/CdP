@@ -219,4 +219,66 @@ class SprintController extends ControllerBase
         $this->view->setVar('sprint', $sprint);
         $this->view->setVar('prog', $prog);
     }
+
+
+    public function assignAction($id_sprint)
+    {
+        $userstories = Userstory::findByid_project($this->session->get("id_proj"));
+        if ($userstories->count()==0){
+            $this->flash->error("Ce projet de comprend aucune userstory, veuillez
+                créer au moins une userstory et un sprint.");
+            return $this->dispatcher->forward(array(
+                "controller" => "userstory",
+                "action" => "index"
+            ));
+        }
+        $this->view->setVar("userstories", $userstories);
+        $this->view->setVar("id_sprint", $id_sprint);
+        
+    }
+
+    public function saveAssignAction()
+    {
+        // We set all the US from the current sprint to null.
+        $old_uss = Userstory::findByid_sprint($this->session->get("id_sprint"));
+        foreach ($old_uss as $old_us) {
+            $old_us->id_sprint = null;
+            if (!$old_us->save()) {
+                $this->flash->error("La modification sur l'US".$old_us->number
+                    ." (id:".$old_us->id_us.") n'a pû être sauvegardé.");
+                return $this->dispatcher->forward(array(
+                    "controller" => "sprint",
+                    "action" => "assign",
+                    "params" => array($this->session->get("id_sprint"))
+                ));
+            }
+        }
+        // We set for each userstory checked the field id_sprint to the current
+        // id_sprint
+        $assignTab = $this->request->getPost("assign");
+        foreach ($assignTab as $assign) {
+            $userstory = Userstory::findFirst($assign);
+            echo $userstory->id_sprint,"--",$this->session->get("id_sprint");
+            $userstory->id_sprint = $this->session->get("id_sprint");
+
+            if (!$userstory->save()) {
+                $this->flash->error("La modification sur l'US".$userstory->number
+                    ." (id:".$userstory->id_us.") n'a pû être sauvegardé.");
+                return $this->dispatcher->forward(array(
+                    "controller" => "sprint",
+                    "action" => "assign",
+                    "params" => array($this->session->get("id_sprint"))
+                ));
+            }
+        }
+        $this->flash->success("sprint was updated successfully");
+
+
+        return $this->dispatcher->forward(array(
+            "controller" => "sprint",
+            "action" => "assign",
+            "params" => array($this->session->get("id_sprint"))
+        ));
+        
+    }
 }

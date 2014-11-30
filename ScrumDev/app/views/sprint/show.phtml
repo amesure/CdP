@@ -23,7 +23,7 @@
 	Liste des User Stories :
 </div>
 
-<table class="table" style="width:80% !important">
+<!--<table class="table" style="width:80% !important">
 	<tr>
 		<th>Intitulé</th>
 		<th>Contenu</th>
@@ -37,7 +37,8 @@
 		<td><?php echo $sprUS->userstory->cost ?></td>
 	</tr>
 <?php } ?>
-</table>
+</table>-->
+<p align="left" style='margin-left:50px'> <?php echo $this->tag->linkTo(array("sprint/assign/".$sprint->id_sprint, "Assigner une nouvelle US", "class"=>"btn")); ?></p>
 
 <?php } else { 
     $this->flash->error("Vous devez être connecté pour avoir accès à cette page.");
