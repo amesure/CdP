@@ -23,21 +23,28 @@
 	Liste des User Stories :
 </div>
 
-<!--<table class="table" style="width:80% !important">
+<table class="table" style="width:80% !important">
 	<tr>
 		<th>Intitulé</th>
 		<th>Contenu</th>
 		<th>Coût</th>
+		<th>Etat</th>
 	</tr>
 
-<?php foreach($sprint->task as $sprUS){ ?>
+<?php 	$i = 0;
+		foreach($us as $sprUS){ ?>
 	<tr>
-		<td><?php echo $sprUS->userstory->title ?></td>
-		<td><?php echo $sprUS->userstory->content ?></td>
-		<td><?php echo $sprUS->userstory->cost ?></td>
+		<td><?php echo "US" . $sprUS->number ?></td>
+		<td><?php echo $sprUS->content ?></td>
+		<td><?php echo $sprUS->cost ?></td>
+		<td><?php if($status[$i])
+					echo "Fait";
+				else
+					echo "A faire"; ?></td>
 	</tr>
-<?php } ?>
-</table>-->
+<?php 		$i++;
+		} ?>
+</table>
 <p align="left" style='margin-left:50px'> <?php echo $this->tag->linkTo(array("sprint/assign/".$sprint->id_sprint, "Assigner une nouvelle US", "class"=>"btn")); ?></p>
 
 <?php echo $this->tag->hiddenField("id_task") ?>

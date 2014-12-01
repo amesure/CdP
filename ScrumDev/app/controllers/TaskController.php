@@ -56,6 +56,7 @@ class TaskController extends ControllerBase
         $task->title = $this->request->getPost("title");
         $task->content = $this->request->getPost("content");
         $task->cost = $this->request->getPost("cost");
+		$task->status = 0;
         $task->id_sprint = $this->session->get("id_sprint");
 
         if (!$task->save()) {
@@ -99,6 +100,7 @@ class TaskController extends ControllerBase
             $this->tag->setDefault("title", $task->title);
             $this->tag->setDefault("content", $task->content);
             $this->tag->setDefault("cost", $task->cost);
+			$this->tag->setDefault("status", $task->status);
         }
     }
 
@@ -125,6 +127,7 @@ class TaskController extends ControllerBase
         $task->title = $this->request->getPost("title");
         $task->content = $this->request->getPost("content");
         $task->cost = $this->request->getPost("cost");
+		$task->status = $this->request->getPost("status");
         if (!$task->save()) {
             foreach ($task->getMessages() as $message) {
                 $this->flash->error($message);

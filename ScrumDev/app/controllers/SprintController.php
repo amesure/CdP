@@ -196,7 +196,25 @@ class SprintController extends ControllerBase
     public function showAction($id_sprint)
     {
         $sprint = Sprint::findFirstByid_sprint($id_sprint);
-
+		$us = UserStory::query()
+			->where("id_sprint = :id_sprint:")
+			->bind(array("id_sprint"=>$id_sprint))
+			->execute();
+		foreach($us as $u){
+			$i = 0;
+			$tasks = Task::query()
+				->join('TaskUs')
+				->where("TaskUs.id_task = Task.id_task AND TaskUs.id_us = :id_us:")
+				->bind(array("id_us"=>$u->id_us))
+				->execute();
+			$usdone = true;
+			foreach($tasks as $task){
+				if($task->status == 0 || $task->status == 1)
+					$usdone = false;
+			}
+			$status[$i] = $usdone;
+			$i++;
+		}
         if ($sprint === false) {
             $this->flash->error("Ce sprint na pas été trouvé.");
             $this->dispatcher->forward(array(
@@ -217,6 +235,8 @@ class SprintController extends ControllerBase
         }
 
         $this->view->setVar('sprint', $sprint);
+		$this->view->setVar('us', $us);
+		$this->view->setVar('status', $status);
         $this->view->setVar('prog', $prog);
     }
 
