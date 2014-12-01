@@ -11,6 +11,7 @@ class MemberController extends ControllerBase
      */
     public function indexAction()
     {
+        $this->checkAccess("index", null);
         $numberPage=1;
         $member=Member::query()->where("Member.id_project = :idpro:")
             ->bind(array("idpro" => $this->session->get("id_proj")))
@@ -42,7 +43,7 @@ class MemberController extends ControllerBase
 
     public function acceptAction($idmember)
     {
-
+        $this->checkAccess("accept", null);
         $member= Member::findFirstByid_member($idmember);
         $member->status=1;
         if (!$member->save()) {
@@ -61,6 +62,7 @@ class MemberController extends ControllerBase
 
     public function invitAction($id_user)
     {
+        $this->checkAccess("invit", null);
         $member=new Member();
         $member->id_user=$id_user;
         $member->id_project=$this->session->get("idproj");
@@ -84,6 +86,7 @@ class MemberController extends ControllerBase
 
     public function inscriptionAction($id_project)
     {
+        $this->checkAccess("inscription", null);
         $project=Project::findFirst(array('id_project = ?0', 'bind' => array($id_project)));
         $member=new Member();
         $member->id_user=$this->session->get('auth');
@@ -108,6 +111,7 @@ class MemberController extends ControllerBase
 
     public function myprojectAction()
     {
+        $this->checkAccess("myproject", null);
         $numberPage=$this->request->getQuery("page", "int");
 
         $member=Member::query()->where("Member.id_user = :user:")
@@ -122,5 +126,25 @@ class MemberController extends ControllerBase
             "page" => $numberPage));
 
         $this->view->page = $paginator->getPaginate();
+    }
+
+    private function checkAccess($action, $id_project)
+    {
+        $role = $this->session->role;
+        $access = array(
+            "Guest" => array(),
+            "User" => array("myproject", "accept", "inscription"),
+            "Member" => array("index", "myproject"),
+            "ScrumMaster" => array("index", "myproject", "accept", "invit")
+            );
+
+        if (array_search($action, $access[$role]) === false) {
+            $this->flash->error("Vous n'avez pas accès à cette page.");
+
+            return $this->dispatcher->forward(array(
+                "controller" => "index",
+                "action" => "index"
+            ));
+        }
     }
 }

@@ -6,7 +6,7 @@ class Dependency extends \Phalcon\Mvc\Model
     /**
      * @var integer
      */
-    public $id_dependancy;
+    public $id_dependency;
 
     /**
      * @var integer

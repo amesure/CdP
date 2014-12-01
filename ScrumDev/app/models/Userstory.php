@@ -43,6 +43,12 @@ class Userstory extends \Phalcon\Mvc\Model
      */
     public $cost;
 
+    /**
+     * @var string
+     *
+     */
+    public $status;
+
 
     /**
      * Initializer method for model.
@@ -59,7 +65,6 @@ class Userstory extends \Phalcon\Mvc\Model
      */
     public function validation()
     {
-        echo "trt";
         // Test if fields have a value different of nul and empty
         // string.
         $this->validate(new PresenceOf([
@@ -75,13 +80,6 @@ class Userstory extends \Phalcon\Mvc\Model
         $this->validate(new PresenceOf([
           'field' => 'cost',
           'message' => 'Un coût est nécessaire.'
-        ]));
-
-
-        // Test if the title doesn't already exist.
-        $this->validate(new Uniqueness([
-            'field' => 'number',
-            'message' => 'Ce nom d\'US est déjà utilisée.'
         ]));
 
         if ($this->validationHasFailed() == true) {

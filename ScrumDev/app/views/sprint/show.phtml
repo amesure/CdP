@@ -20,13 +20,16 @@
 
 <h1><?php echo "Sprint ",$sprint->number ?></h1>
 
-<p align="left" style='margin-left:50px'>
+<p align="left" style='margin-left:5%'>
 	<b>Etat du sprint :</b> <?php echo $prog ?><br/>
 </p>
 
-<div align="left" style='margin-left:50px'>
+<div align="left" style='margin-left:5%'>
 	Liste des User Stories :
 </div>
+<?php if ($us->count() == 0) { ?>
+	<div align="left" style='margin-left:20px'> Ce sprint ne contient aucune Userstory.</div>
+<?php } else {  ?>
 
 <table class="table" style="width:80% !important">
 	<tr>
@@ -37,6 +40,7 @@
 	</tr>
 
 <?php 	$i = 0;
+		echo $us->count();
 		foreach($us as $sprUS){ ?>
 	<tr>
 		<td><?php echo "US" . $sprUS->number ?></td>
@@ -50,6 +54,10 @@
 <?php 		$i++;
 		} ?>
 </table>
+
+<?php } ?>
+
+
 <p align="left" style='margin-left:50px'> <?php echo $this->tag->linkTo(array("sprint/assign/".$sprint->id_sprint, "Assigner une nouvelle US", "class"=>"btn")); ?></p>
 
 <?php echo $this->tag->hiddenField("id_task") ?>

@@ -2,6 +2,8 @@
 
 <?php if ($this->session->has('auth')){?>
 
+<?php echo $this->tag->form("userstory/save") ?>
+
 <table width="100%">
     <tr>
         <td align="left"><?php echo $this->tag->linkTo(array("backlog/index", "Retour", "class"=>"btn")) ?></td>
@@ -11,38 +13,38 @@
 
 <h1>Edition de l'US</h1>
 
-<?php echo $this->tag->form("userstory/save") ?>
-    <table>
-        <tr>
-            <td align="right">
-                <label for="title">Titre</label>
-            </td>
-            <td align="left">
-                <?php echo $this->tag->textField(array("title", "size" => 10)) ?>
-            </td>
-        </tr>
-        <tr>
-            <td align="right">
-                <label for="content">Contenu</label>
-            </td>
-            <td align="left">
-                <?php echo $this->tag->textField(array("content", "size" => 254)) ?>
-            </td>
-        </tr>
-        <tr>
-            <td align="right">
-                <label for="cost">Coût</label>
-            </td>
-            <td align="left">
-                <?php echo $this->tag->numericField(array("cost")) ?>
-            </td>
-        </tr>
 
-        <tr>
-            <td><?php echo $this->tag->hiddenField("id") ?></td>
-            <td><?php echo $this->tag->submitButton("Valider") ?></td>
-        </tr>
-    </table>
+<table>
+    <tr>
+        <td align="right">
+            <label for="number">Numéro</label>
+        </td>
+        <td align="left">
+            <?php echo $this->tag->textField(array("number", "size" => 10)) ?>
+        </td>
+    </tr>
+    <tr>
+        <td align="right">
+            <label for="content">Contenu</label>
+        </td>
+        <td align="left">
+            <?php echo $this->tag->textField(array("content", "size" => 254)) ?>
+        </td>
+    </tr>
+    <tr>
+        <td align="right">
+            <label for="cost">Coût</label>
+        </td>
+        <td align="left">
+            <?php echo $this->tag->numericField(array("cost")) ?>
+        </td>
+    </tr>
+
+    <tr>
+        <td><?php echo $this->tag->hiddenField("id") ?></td>
+        <td><?php echo $this->tag->submitButton("Valider") ?></td>
+    </tr>
+</table>
 </form>
 
 <?php } else { 

@@ -6,7 +6,7 @@
 
 <table width="100%">
     <tr>
-        <td align="left"><?php echo $this->tag->linkTo(array("project/index", "Retour", "class"=>"btn")); ?></td>
+        <td align="left"><?php echo $this->tag->linkTo(array("sprint/show/".$this->session->get('id_sprint'), "Retour", "class"=>"btn")); ?></td>
         <td align="right"><?php echo $this->tag->submitButton(array("Sauvegarder", "class"=>"btn")) ?></td>
     </tr>
 </table>

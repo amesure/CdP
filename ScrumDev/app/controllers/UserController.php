@@ -67,7 +67,7 @@ class UserController extends ControllerBase
      *
      * @param string $id_user
      */
-    public function editAction($id_user)
+/*    public function editAction($id_user)
     {
         if (!$this->request->isPost()) {
             $user = User::findFirstByid_user($id_user);
@@ -88,7 +88,7 @@ class UserController extends ControllerBase
             $this->tag->setDefault("password", $user->password);
             
         }
-    }
+    }*/
 
     /**
      * Creates a new user

@@ -1,8 +1,5 @@
 <?php echo $this->getContent(); ?>
 
-<?php /*if ($this->session->has('auth')){*/?>
-
-
 <table width="100%">
     <tr>
         <td align="left">
@@ -74,6 +71,9 @@
             <?php } ?>
         </table>
     </p>
+    <td align="right">
+            <?php echo $this->tag->linkTo(array("member/inscription/".$project->id_project, "Postuler", "class"=>"btn")); ?>
+        </td>
 </div>
 
 <div align="left" style="margin-left:5%">
@@ -90,8 +90,3 @@
         </table>
     </p>
 </div>
-
-
-<?php /*} else { 
-    $this->flash->error("Vous devez être connecté pour avoir accès à cette page.");
-} */?>

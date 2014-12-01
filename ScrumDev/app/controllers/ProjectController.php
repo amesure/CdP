@@ -31,7 +31,6 @@ class ProjectController extends ControllerBase
     }
 
 
-
     public function showAction($id_project)
     {
         $this->checkAccess("show", $id_project);
@@ -307,14 +306,14 @@ class ProjectController extends ControllerBase
         ));
     }
 
-    public function checkAccess($action, $id_project)
+    private function checkAccess($action, $id_project)
     {
         $role = $this->session->role;
         $access = array(
             "Guest" => array("index"),
             "User" => array("index", "new", "show"),
-            "Member" => array("index", "create", "new", "show", "edit"),
-            "ScrumMaster" => array("index", "create", "new", "show", "edit", "delete")
+            "Member" => array("index", "new", "show", "edit"),
+            "ScrumMaster" => array("index", "new", "show", "edit", "delete")
             );
 
         if (array_search($action, $access[$role]) === false) {

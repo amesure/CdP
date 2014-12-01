@@ -13,7 +13,7 @@ class UserstoryController extends ControllerBase
         $id_project = $this->session->get('id_proj');
         $backlog = Userstory::findByid_project($id_project);
         if (!$backlog) {
-            $this->flash->error("us was not found");
+            $this->flash->error("Cette userstory n'existe pas.");
 
             return $this->dispatcher->forward(array(
                 "controller" => "userstory",
@@ -33,7 +33,7 @@ class UserstoryController extends ControllerBase
         if (!$this->request->isPost()) {
             $us = Userstory::findFirstByid_us($id_us);
             if (!$us) {
-                $this->flash->error("us was not found");
+                $this->flash->error("Cette userstory n'existe pas.");
                 return $this->dispatcher->forward(array(
                     "controller" => "userstory",
                     "action" => "index"
@@ -42,7 +42,7 @@ class UserstoryController extends ControllerBase
 
             $this->view->setVar("id", $us->id_us);
             $this->tag->setDefault("id", $us->id_us);
-            $this->tag->setDefault("title", $us->title);
+            $this->tag->setDefault("number", $us->number);
             $this->tag->setDefault("content", $us->content);
             $this->tag->setDefault("cost", $us->cost);
         }
@@ -65,13 +65,29 @@ class UserstoryController extends ControllerBase
                 "action" => "index"
             ));
         }
+        // We're testing there no US with the same number for this project.
+        $uss = Userstory::find(array("id_project = :id_project: AND number = :number:", 
+            "bind" => array(
+                "id_project" => $this->session->get("id_proj"),
+                "number" => $this->request->getPost("number")
+            )
+        ));
+        if($uss->count() > 0) {
+            $this->flash->error("Ce numéro d'US est déjà utilisé, veuillez en choisir un autre.");
+            return $this->dispatcher->forward(array(
+                "controller" => "userstory",
+                "action" => "new"
+            ));
+        }
 
+        // And we create the new Userstory.
         $us = new Userstory();
         $us->id_project = $this->session->get('id_proj');
         $us->id_sprint = null;
         $us->number = $this->request->getPost("number");
         $us->content = $this->request->getPost("content");
         $us->cost = $this->request->getPost("cost");
+        $us->status = "todo";
 
         if (!$us->save()) {
             foreach ($us->getMessages() as $message) {
@@ -83,7 +99,7 @@ class UserstoryController extends ControllerBase
             ));
         }
 
-        $this->flash->success("US créée");
+        $this->flash->success("Userstory créée avec succès");
 
         return $this->dispatcher->forward(array(
             "controller" => "userstory",
@@ -111,7 +127,7 @@ class UserstoryController extends ControllerBase
             'bind' => array('id_us' => $id_us)
         ));
         if (!$us) {
-            $this->flash->error("Cette US n'existe pas " . $id_us);
+            $this->flash->error("Cette userstory n'existe pas.");
 
             return $this->dispatcher->forward(array(
                 "controller" => "userstory",
@@ -136,7 +152,7 @@ class UserstoryController extends ControllerBase
             ));
         }
 
-        $this->flash->success("US was updated successfully");
+        $this->flash->success("Userstory correctement modifiée.");
 
         return $this->dispatcher->forward(array(
             "controller" => "userstory",
@@ -152,10 +168,9 @@ class UserstoryController extends ControllerBase
      */
     public function deleteAction($id_us)
     {
-
         $us = Userstory::findFirstByid_us($id_us);
         if (!$us) {
-            $this->flash->error("us was not found");
+            $this->flash->error("Cette userstory n'existe pas.");
 
             return $this->dispatcher->forward(array(
                 "controller" => "userstory",
@@ -174,7 +189,7 @@ class UserstoryController extends ControllerBase
             ));
         }
 
-        $this->flash->success("us was deleted successfully");
+        $this->flash->success("Userstory supprimée.");
 
         return $this->dispatcher->forward(array(
             "controller" => "userstory",

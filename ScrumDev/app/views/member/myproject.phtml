@@ -1,7 +1,5 @@
 <?php echo $this->getContent(); ?>
 
-<?php if ($this->session->has('auth')){?>
-
 <table width="100%">
     <tr>
         <td align="left">
@@ -42,7 +40,6 @@
 				?></td>
 				<td><?php echo $this->tag->linkTo(array("project/show/" . $member->id_project, "Détails")); ?></td>				
 				<td><?php 
-				echo $member->status;
 				switch($member->status){
 					
 					case 1:
@@ -71,8 +68,3 @@
     </tr>
 </table>
 <?php echo $page->current, "/", $page->total_pages ?>
-
-
-<?php } else { 
-    $this->flash->error("Vous devez être connecté pour avoir accès à cette page.");
-} ?>

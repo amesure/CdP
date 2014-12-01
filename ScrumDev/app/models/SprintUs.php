@@ -33,10 +33,9 @@ class SprintUs extends \Phalcon\Mvc\Model
     public function columnMap()
     {
         return array(
-            'id_sprint_us' => 'id_sprint_us', 
-            'id_sprint' => 'id_sprint', 
+            'id_sprint_us' => 'id_sprint_us',
+            'id_sprint' => 'id_sprint',
             'id_us' => 'id_us'
         );
     }
-
 }

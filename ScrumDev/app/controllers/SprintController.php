@@ -197,7 +197,6 @@ class SprintController extends ControllerBase
     public function showAction($id_sprint)
     {   
         $sprint = Sprint::findFirstByid_sprint($id_sprint);
-        echo $sprint->status;
 		$us = Userstory::query()
 			->where("id_sprint = :id_sprint:")
 			->bind(array("id_sprint"=>$id_sprint))
@@ -235,11 +234,10 @@ class SprintController extends ControllerBase
         } else {
             $prog = "Fini";
         }
-        echo $sprint->status;
+
         $uss = Userstory::findByid_sprint($sprint->id_sprint);
         if ($sprint->status === "closed"){
             foreach ($uss as $us) {
-                echo "shit";
                 $us_arch = new UsArchive();
                 $us_arch->id_us = $us->id_us;
                 $us_arch->id_project = $us->id_project;
@@ -310,7 +308,6 @@ class SprintController extends ControllerBase
         $assignTab = $this->request->getPost("assign");
         foreach ($assignTab as $assign) {
             $userstory = Userstory::findFirst($assign);
-            echo $userstory->id_sprint,"--",$this->session->get("id_sprint");
             $userstory->id_sprint = $this->session->get("id_sprint");
 
             if (!$userstory->save()) {
