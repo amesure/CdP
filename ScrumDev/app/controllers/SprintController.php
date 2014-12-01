@@ -201,6 +201,7 @@ class SprintController extends ControllerBase
 			->where("id_sprint = :id_sprint:")
 			->bind(array("id_sprint"=>$id_sprint))
 			->execute();
+		$status[0] = false;
 		foreach($us as $u){
 			$i = 0;
 			$tasks = Task::query()
