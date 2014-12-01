@@ -295,4 +295,103 @@ class TaskController extends ControllerBase
             "action" => "index"
         ));
     }
+	
+	/**
+     * Shows a form to select the US that this task is related to
+     *
+     * @param string $id_task
+     */
+    public function taskUsAction($id_task)
+    {
+        $us = Userstory::query()
+            ->where("id_sprint = :id_sprint:")
+            ->bind(array("id_sprint"=>$this->session->get("id_sprint")))
+            ->execute();
+		$i = 0;
+		foreach($us as $u){
+			$tu[$i] = new TaskUsCheck();
+			$tu[$i]->id_us = $u->id_us;
+			$tu[$i]->id_project = $u->id_project;
+            $tu[$i]->id_sprint = $u->id_sprint;
+            $tu[$i]->number = $u->number;
+            $tu[$i]->content = $u->content;
+            $tu[$i]->cost = $u->cost;
+			$deps = TaskUs::query()
+				->where("id_task = :id_task:")
+				->andWhere("id_us = :id_us:")
+				->bind(array("id_task"=>$id_task, "id_us"=>$tu[$i]->id_us))
+				->execute();
+			if($deps->count() == 1){
+				$tu[$i]->dep = true;
+			}
+			else{
+				$tu[$i]->dep = false;
+			}
+			$i += 1;
+		}
+        $this->view->page = $tu;
+        $this->view->id_task = $id_task;
+        $this->tag->setDefault("id_task", $id_task);
+    }
+
+    /**
+     * New relation between task and US
+     */
+    public function newTaskUSAction()
+    {
+        $dependancies = $this->request->getPost("dependancy");
+        $id_task = $this->request->getPost("id_task");
+        /* On récupère les anciennes dépendances qu'on transforme en array */
+		$old_deps = TaskUs::query()
+			->where("id_task = :id_task:")
+			->bind(array("id_task"=>$id_task))
+			->execute();
+		$old_deps_array = $old_deps->toArray();
+		if($dependancies){
+			/* On ajoute celles qui sont à ajouter en évitant les doublons et double sens */
+			foreach ($dependancies as $id_us) {
+				$deps = TaskUs::query()
+					->where("id_task = :id_task: AND id_us = :id_us:")
+					->bind(array("id_task"=>$id_task, "id_us"=>$id_us))
+					->execute();
+				/* Vérification pour éviter les doublons */
+				if($deps->count() < 1){
+					$dep = new TaskUs();
+					$dep->id_task = $id_task;
+					$dep->id_us = $id_us;
+					if (!$dep->save()) {
+						foreach ($dep->getMessages() as $message) {
+							$this->flash->error($message);
+						}
+					}
+				} else {
+					echo "Le lien entre la tache " . strval($id_task) . " et l'US " . strval($id_us) . " existe déjà";
+				}
+				/* On supprime de l'array celles qui sont déjà présentent dans les anciennes dépandences */
+				if(count($old_deps_array) > 0){
+					for($i=0; $i<count($old_deps_array); $i++){
+						if($old_deps_array[$i]["id_us"] == $id_us){
+							unset($old_deps_array[$i]);
+						}
+					}
+				}
+				/* On remet l'array avec en premier indice 0 */
+				$old_deps_array = array_values($old_deps_array);
+            }
+        }
+		/* On regarde les dépendances qui restent et on les supprime */
+		if(count($old_deps_array) > 0){
+			for($i=0; $i<count($old_deps_array); $i++){
+				$dep = TaskUs::query()
+					->where("id_task_us = :id_task_us:")
+					->bind(array("id_task_us"=>$old_deps_array[$i]["id_task_us"]))
+					->execute();
+				$dep->delete();
+			}
+		}
+        return $this->dispatcher->forward(array(
+            "controller" => "task",
+            "action" => "index"
+        ));
+    }
 }

@@ -1,0 +1,41 @@
+<?php echo $this->getContent(); ?>
+
+<?php echo $this->tag->form("task/newTaskUs") ?>
+
+<table width="100%">
+    <tr>
+        <td align="left"><?php echo $this->tag->linkTo(array("task", "Back")) ?></td>
+        <td align="right"><?php echo $this->tag->submitButton("Save") ?></td>
+    </tr>
+</table>
+
+<div align="center">
+    <h1>UserSotries se rapportant à la tâche</h1>
+</div>
+
+<table class="browse" align="center">
+		<thead>
+			<tr>
+				<th>Titre US</th>
+				<th>Description</th>
+				<th>Cout</th>
+				<th>Liaison</th>
+			</tr>
+		</thead>
+		<tbody>
+		<?php foreach ($page as $us) { ?>
+			<tr>
+				<td><?php echo "US" . $us->number ?></td>
+				<td><?php echo $us->content ?></td>
+				<td><?php echo $us->cost ?></td>
+				<td><?php if($us->dep)
+							echo $this->tag->checkField(array("dependancy[]", "value" => $us->id_us, "checked" => "checked"));
+						else
+							echo $this->tag->checkField(array("dependancy[]", "value" => $us->id_us));?></td>
+			</tr>
+			<tr>
+				<td><?php echo $this->tag->hiddenField("id_task") ?></td>
+			</tr>
+		<?php } ?>
+		</tbody>
+	</table>

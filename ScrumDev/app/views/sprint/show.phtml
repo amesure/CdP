@@ -39,6 +39,8 @@
 <?php } ?>
 </table>
 
+<?php echo $this->tag->hiddenField("id_task") ?>
+
 <?php } else { 
     $this->flash->error("Vous devez être connecté pour avoir accès à cette page.");
 } ?>
