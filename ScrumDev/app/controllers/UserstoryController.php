@@ -68,7 +68,7 @@ class UserstoryController extends ControllerBase
 
         $us = new Userstory();
         $us->id_project = $this->session->get('id_proj');
-        $us->id_sprint = 1;
+        $us->id_sprint = null;
         $us->number = $this->request->getPost("number");
         $us->content = $this->request->getPost("content");
         $us->cost = $this->request->getPost("cost");
