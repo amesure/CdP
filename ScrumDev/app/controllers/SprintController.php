@@ -11,7 +11,7 @@ class SprintController extends ControllerBase
      */
     public function indexAction()
     {
-
+        $this->updateStatus();
         if ($this->session->has("id_proj")) {
             $id_proj = $this->session->get("id_proj");
         } else {
@@ -82,6 +82,7 @@ class SprintController extends ControllerBase
         $sprint->id_project = $this->session->id_proj;
         $sprint->begin = $this->request->getPost("begin");
         $sprint->end = $this->request->getPost("end");
+        $sprint->status = "todo";
         
 
         if (!$sprint->save()) {
@@ -194,9 +195,10 @@ class SprintController extends ControllerBase
 
 
     public function showAction($id_sprint)
-    {
+    {   
         $sprint = Sprint::findFirstByid_sprint($id_sprint);
-		$us = UserStory::query()
+        echo $sprint->status;
+		$us = Userstory::query()
 			->where("id_sprint = :id_sprint:")
 			->bind(array("id_sprint"=>$id_sprint))
 			->execute();
@@ -232,6 +234,36 @@ class SprintController extends ControllerBase
             $prog = "En cours";
         } else {
             $prog = "Fini";
+        }
+        echo $sprint->status;
+        $uss = Userstory::findByid_sprint($sprint->id_sprint);
+        if ($sprint->status === "closed"){
+            foreach ($uss as $us) {
+                echo "shit";
+                $us_arch = new UsArchive();
+                $us_arch->id_us = $us->id_us;
+                $us_arch->id_project = $us->id_project;
+                $us_arch->id_sprint = $us->id_sprint;
+                $us_arch->number = $us->number;
+                $us_arch->content = $us->content;
+                $us_arch->cost = $us->cost;
+                $us_arch->status = $us->status;
+                if (!$us_arch->save()) {
+                    foreach ($us_arch->getMessages() as $message) {
+                        $this->flash->error($message);
+                    }
+                }
+            }
+            $sprint->status = "archived";
+            if (!$sprint->save()) {
+                foreach ($sprint->getMessages() as $message) {
+                    $this->flash->error($message);
+                }
+            }
+            $us = UsArchive::findByid_sprint($sprint->id_sprint);
+        }
+        if ($sprint->status === "archived" || $sprint->status === "closed") {
+            $us = UsArchive::findByid_sprint($sprint->id_sprint);
         }
 
         $this->view->setVar('sprint', $sprint);
@@ -300,5 +332,23 @@ class SprintController extends ControllerBase
             "params" => array($this->session->get("id_sprint"))
         ));
         
+    }
+    private function updateStatus(){
+        $sprints = Sprint::findByid_project($this->session->get('id_proj'));
+        $date = date("Y-m-d");
+        foreach ($sprints as $sprint) {
+            if ($date < $sprint->begin) {
+                $sprint->status = "todo";
+            } elseif ($date < $sprint->end) {
+                $sprint->status = "ongoing";
+            } elseif ($sprint->status !== "archived") {
+               $sprint->status = "closed";
+            }
+            if (!$sprint->save()) {
+                foreach ($sprint->getMessages() as $message) {
+                    $this->flash->error($message);
+                }
+            }
+        }
     }
 }

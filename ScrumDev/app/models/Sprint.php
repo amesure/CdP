@@ -33,6 +33,13 @@ class Sprint extends \Phalcon\Mvc\Model
      */
     public $end;
 
+    /**
+     *
+     * @var string
+     */
+    public $status;
+
+
     public function initialize()
     {
         $this->hasMany("id_sprint", "Task", "id_sprint");
