@@ -1,0 +1,78 @@
+<?php echo $this->getContent()?>
+
+<?php if ($this->session->has('auth')) { ?>
+
+<table width="100%">
+    <tr>
+        <td align="left">
+            <?php echo $this->tag->linkTo(array("sprint/index", "Retour", "class"=>"btn")) ?>
+        </td>
+    </tr>
+</table>
+<div align="right">
+    
+</div>
+
+<h1>Kanban</h1>
+
+<table class="table" style="width:80% !important">
+    <tr>
+        <th>To do</th>
+        <th>In progress</th>
+        <th>Done</th>
+    </tr>
+	<td>
+    <?php foreach($todo as $task){ ?>
+        <?php echo $task->title ?><br>
+        <?php echo $this->tag->linkTo('task/inprogress/'.$task->id_task, 'do') ?><br>
+		
+		
+		<hr>
+        
+    <?php } ?>
+	</td>
+	<td>
+    <?php foreach($inprogress as $task){ ?>
+        <?php echo $task->title ?><br>
+		 <?php echo $task->User->login ?><br>
+		 <?php if($this->session->get('canceltask')==$task->id_task){ 
+				echo $this->tag->linkTo('task/todo/'.$task->id_task, 'annuler');}?>
+				
+        <?php echo $this->tag->linkTo('task/done/'.$task->id_task, 'done') ?><br>		
+		<?php if($this->session->get('perm')==0){?>
+		<?php echo $this->tag->form(array("task/switch/".$task->id_task, "autocomplete" => "off"))?>
+		<?php echo Phalcon\Tag::select(array(
+					"User",
+					User::query()
+							->join('Member')
+							->where("Member.id_project = :idpro:")
+							->bind(array("idpro" => $this->session->get("id_proj")))
+							->execute(),
+					"using" => array("id_user", "login")
+					));
+				
+		?>
+		<?php echo $this->tag->submitButton(array("Valider", "class" => "btn btn-primary btn-large")) ?>
+		</form>
+		<?php }?>
+		<hr>
+        
+    <?php } ?>
+	</td>
+	<td>
+    <?php foreach($done as $task){ ?>
+        <?php echo $task->title ?><br>		
+		 <?php echo $task->User->login ?> <br>
+		 <?php if($this->session->get('canceltask')==$task->id_task){ 
+				echo $this->tag->linkTo('task/inprogress/'.$task->id_task, 'annuler');}?>
+				
+		
+		<hr>
+        
+    <?php } ?>
+	</td>
+</table>
+
+<?php } else { 
+    $this->flash->error("Vous devez être connecté pour avoir accès à cette page.");
+} ?>

@@ -56,8 +56,9 @@ class TaskController extends ControllerBase
         $task->title = $this->request->getPost("title");
         $task->content = $this->request->getPost("content");
         $task->cost = $this->request->getPost("cost");
-		$task->status = 0;
         $task->id_sprint = $this->session->get("id_sprint");
+		$task->status="to do";
+
 
         if (!$task->save()) {
             foreach ($task->getMessages() as $message) {
@@ -127,7 +128,7 @@ class TaskController extends ControllerBase
         $task->title = $this->request->getPost("title");
         $task->content = $this->request->getPost("content");
         $task->cost = $this->request->getPost("cost");
-		$task->status = $this->request->getPost("status");
+
         if (!$task->save()) {
             foreach ($task->getMessages() as $message) {
                 $this->flash->error($message);
@@ -397,4 +398,99 @@ class TaskController extends ControllerBase
             "action" => "index"
         ));
     }
+
+	
+	public function todoAction($idtask)
+	{
+		 $task = Task::findFirstByid_task($idtask);
+		 if($task->id_user==NULL or $task->id_user==$this->session->get('auth')){
+			$task->id_user=NULL;
+			$task->status="to do";
+			 if (!$task->save()) {
+            foreach ($task->getMessages() as $message) {
+                $this->flash->error($message);}
+				}
+			$this->session->set('canceltask',$task->id_task);
+			}
+		
+		else{
+			$this->flash->error("Vous n'êtes pas le responsable de la tâche");
+			}
+			
+		return $this->dispatcher->forward(array(
+            "controller" => "sprint",
+            "action" => "kanban"
+        ));
+		
+	}
+	
+	public function inprogressAction($idtask)
+	{
+		 $task = Task::findFirstByid_task($idtask);
+		 if($task->id_user==NULL or $task->id_user==$this->session->get('auth')){
+			$task->id_user=$this->session->get('auth');
+			$task->status="in progress";
+			 if (!$task->save()) {
+            foreach ($task->getMessages() as $message) {
+                $this->flash->error($message);}
+				}
+			if($this->session->get('canceltask')!=$task->id_task){
+			$this->session->set('canceltask',$task->id_task);}
+			else{
+			$this->session->remove('canceltask');
+			}
+			}
+		
+		else{
+			$this->flash->error("Vous n'êtes pas le responsable de la tâche");
+			}
+			
+		return $this->dispatcher->forward(array(
+            "controller" => "sprint",
+            "action" => "kanban"
+        ));
+		
+	}
+	
+		public function doneAction($idtask)
+	{
+		 $task = Task::findFirstByid_task($idtask);
+		 if($task->id_user==NULL or $task->id_user==$this->session->get('auth')){			
+			$task->status="done";
+			 if (!$task->save()) {
+            foreach ($task->getMessages() as $message) {
+                $this->flash->error($message);}
+				}
+			$this->session->set('canceltask',$task->id_task);
+			}
+		
+		else{
+			$this->flash->error("Vous n'êtes pas le responsable de la tâche");
+			}
+			
+		return $this->dispatcher->forward(array(
+            "controller" => "sprint",
+            "action" => "kanban"
+        ));
+		
+	}
+	
+	public function switchAction($idtask)
+	{
+		if($this->request->isPost()){
+		 $iduser = $this->request->getPost("User");
+		 $task = Task::findFirstByid_task($idtask);
+		 $task->id_user=$iduser;
+		 if (!$task->save()) {
+            foreach ($task->getMessages() as $message) {
+                $this->flash->error($message);}
+			}		 
+		 }
+		return $this->dispatcher->forward(array(
+            "controller" => "sprint",
+            "action" => "kanban"
+        ));
+	}
+			
+		
 }
