@@ -33,20 +33,7 @@
 				<td><?php echo $task->cost ?></td>
 				<td><?php echo $this->tag->linkTo(array("task/dependancy/" . $task->id_task, "Dépendances de T" . $task->id_task)); ?></td>
 				<td><?php echo $this->tag->linkTo(array("task/taskus/" . $task->id_task, "US de T" . $task->id_task)); ?></td>
-				<td><?php switch($task->status){
-						case 0:
-							echo "A faire";
-							break;
-						case 1:
-							echo "En cours";
-							break;
-						case 2:
-							echo "Fini";
-							break;
-						default:
-							echo "A faire";
-							break;
-					}?></td>
+				<td><?php echo $task->status;?></td>
 				<td><?php echo $this->tag->linkTo(array("task/edit/" . $task->id_task, "Edit")); ?></td>
 				<td><?php echo $this->tag->linkTo(array("task/delete/" . $task->id_task, "Delete")); ?></td>
 			</tr>

@@ -38,17 +38,6 @@
             <?php echo $this->tag->numericField(array("cost", "value">0)) ?>
         </td>
     </tr>
-	<tr>
-        <td align="right">
-            <label for="cost">Etat</label>
-        </td>
-        <td align="left">
-            <?php echo $this->tag->numericField(array("status", "value">0)) ?>
-        </td>
-		<td align="left">
-            <p>0 : à faire<br/>1 : en cours<br/>2 : fini</p>
-        </td>
-    </tr>
     <tr>
         <td><?php echo $this->tag->hiddenField("id_task") ?></td>
         <td><?php echo $this->tag->submitButton("Save") ?></td>

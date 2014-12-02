@@ -5,7 +5,7 @@
 <table width="100%">
     <tr>
         <td align="left">
-            <?php echo $this->tag->linkTo(array("sprint/index", "Retour", "class"=>"btn")) ?>
+            <?php echo $this->tag->linkTo(array("sprint/show/" . $this->session->get("id_sprint"), "Retour", "class"=>"btn")) ?>
         </td>
     </tr>
 </table>
@@ -17,14 +17,14 @@
 
 <table class="table" style="width:80% !important">
     <tr>
-        <th>To do</th>
-        <th>In progress</th>
-        <th>Done</th>
+        <th>A faire</th>
+        <th>En cours</th>
+        <th>Fait</th>
     </tr>
 	<td>
     <?php foreach($todo as $task){ ?>
         <?php echo $task->title ?><br>
-        <?php echo $this->tag->linkTo('task/inprogress/'.$task->id_task, 'do') ?><br>
+        <?php echo $this->tag->linkTo(array('task/inprogress/'.$task->id_task, 'Commencer', "class"=>"btn")) ?><br>
 		
 		
 		<hr>
@@ -36,9 +36,9 @@
         <?php echo $task->title ?><br>
 		 <?php echo $task->User->login ?><br>
 		 <?php if($this->session->get('canceltask')==$task->id_task){ 
-				echo $this->tag->linkTo('task/todo/'.$task->id_task, 'annuler');}?>
+				echo $this->tag->linkTo(array('task/todo/'.$task->id_task, 'Annuler', "class"=>"btn"));}?>
 				
-        <?php echo $this->tag->linkTo('task/done/'.$task->id_task, 'done') ?><br>		
+        <?php echo $this->tag->linkTo(array('task/done/'.$task->id_task, 'Fait', "class"=>"btn")) ?><br>		
 		<?php if($this->session->get('perm')==0){?>
 		<?php echo $this->tag->form(array("task/switch/".$task->id_task, "autocomplete" => "off"))?>
 		<?php echo Phalcon\Tag::select(array(
@@ -64,7 +64,7 @@
         <?php echo $task->title ?><br>		
 		 <?php echo $task->User->login ?> <br>
 		 <?php if($this->session->get('canceltask')==$task->id_task){ 
-				echo $this->tag->linkTo('task/inprogress/'.$task->id_task, 'annuler');}?>
+				echo $this->tag->linkTo(array('task/inprogress/'.$task->id_task, 'Annuler', "class"=>"btn"));}?>
 				
 		
 		<hr>

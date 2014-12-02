@@ -101,7 +101,6 @@ class TaskController extends ControllerBase
             $this->tag->setDefault("title", $task->title);
             $this->tag->setDefault("content", $task->content);
             $this->tag->setDefault("cost", $task->cost);
-			$this->tag->setDefault("status", $task->status);
         }
     }
 
@@ -398,7 +397,6 @@ class TaskController extends ControllerBase
             "action" => "index"
         ));
     }
-
 	
 	public function todoAction($idtask)
 	{
