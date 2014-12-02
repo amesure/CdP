@@ -163,7 +163,6 @@ class SprintController extends ControllerBase
      */
     public function deleteAction($id_sprint)
     {
-
         $sprint = Sprint::findFirstByid_sprint($id_sprint);
         if (!$sprint) {
             $this->flash->error("sprint was not found");
@@ -184,7 +183,6 @@ class SprintController extends ControllerBase
                 "action" => "search"
             ));
         }
-
         $this->flash->success("sprint was deleted successfully");
 
         return $this->dispatcher->forward(array(
@@ -307,7 +305,8 @@ class SprintController extends ControllerBase
         // We set for each userstory checked the field id_sprint to the current
         // id_sprint
         $assignTab = $this->request->getPost("assign");
-        foreach ($assignTab as $assign) {
+        if ($assignTab!=null){
+            foreach ($assignTab as $assign) {
             $userstory = Userstory::findFirst($assign);
             $userstory->id_sprint = $this->session->get("id_sprint");
 
@@ -321,7 +320,9 @@ class SprintController extends ControllerBase
                 ));
             }
         }
-        $this->flash->success("sprint was updated successfully");
+        }
+        
+        $this->flash->success("Sprint mis à jour correctement.");
 
 
         return $this->dispatcher->forward(array(

@@ -24,6 +24,7 @@ class ProjectController extends ControllerBase
         $this->view->page = $paginator->getPaginate();
 
         $this->session->remove('id_proj');
+        $this->session->remove('id_sprint');
         $this->session->remove('perm');
         if ($this->session->get('auth')) {
             $this->session->set('role', 'User');
