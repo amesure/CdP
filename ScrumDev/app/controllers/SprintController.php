@@ -211,7 +211,7 @@ class SprintController extends ControllerBase
 				->execute();
 			$usdone = true;
 			foreach($tasks as $task){
-				if($task->status == 0 || $task->status == 1)
+				if($task->status == 'to do' || $task->status == 'in progress')
 					$usdone = false;
 			}
 			$status[$i] = $usdone;
