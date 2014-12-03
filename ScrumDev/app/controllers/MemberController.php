@@ -54,33 +54,51 @@ class MemberController extends ControllerBase
 
         $this->flash->success("le membre a été ajouté avec succés");
         return $this->dispatcher->forward(array(
-            "controller" => "member",
+            "controller" => "project",
             "action" => "index"
         ));
     }
 
 
-    public function invitAction($id_user)
+    public function invitAction()
     {
         $this->checkAccess("invit", null);
-        $member=new Member();
-        $member->id_user=$id_user;
-        $member->id_project=$this->session->get("idproj");
-        $member->status=2;
-        if (!$member->save()) {
-            foreach ($member->getMessages() as $message) {
-                $this->flash->error($message);
-            }
+		 if ($this->request->isPost()) {
+			$user=User::query()->where("login=:log:")->bind(array("log" => $this->request->getPost("login")))->execute();			
+			if($user->count()==0)
+			{
+				$this->flash->error("L'utilisateur n'existe pas");
+				 return $this->dispatcher->forward(array(
+					"controller" => "project",
+					"action" => "index"));
+			}
+			
+			$test=Member::query()->where("id_user = :id:")->bind(array("id" => $user->getFirst()->id_user))->execute();
+			if($test->count()>0){
+				$this->flash->error("L'utilisateur est déjà membre");
+				 return $this->dispatcher->forward(array(
+					"controller" => "project",
+					"action" => "index"));
+			}
+			$member=new Member();	
+			$member->id_user=$user->getFirst()->id_user;
+			$member->id_project=$this->session->get("id_proj");
+			$member->status=2;
+			if (!$member->save()) {
+				foreach ($member->getMessages() as $message) {
+						$this->flash->error($message);
+					}
 
-            return $this->dispatcher->forward(array(
-                "controller" => "member",
-                "action" => "index"
-            ));
-        }
+				return $this->dispatcher->forward(array(
+					"controller" => "project",
+					"action" => "index"
+				));
+        }	
+		}
 
         $this->flash->success("L'invitaion a été envoyé");
         return $this->dispatcher->forward(array(
-            "controller" => "member",
+            "controller" => "project",
             "action" => "index"));
     }
 
@@ -88,6 +106,13 @@ class MemberController extends ControllerBase
     {
         $this->checkAccess("inscription", null);
         $project=Project::findFirst(array('id_project = ?0', 'bind' => array($id_project)));
+		$member=Member::query()->where("id_user = :id:")->bind(array("id" => $this->session->get('auth')))->execute();
+			if($member->count()>0){
+				$this->flash->error("Vous êtes déjà membre");
+				 return $this->dispatcher->forward(array(
+					"controller" => "project",
+					"action" => "index"));
+			}
         $member=new Member();
         $member->id_user=$this->session->get('auth');
         $member->id_project=$project->id_project;

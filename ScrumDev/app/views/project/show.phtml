@@ -6,7 +6,7 @@
             <?php echo $this->tag->linkTo(array("project/index", "Retour", "class"=>"btn")); ?>
         </td>
         <td align="right">
-            <?php echo $this->tag->linkTo(array("member/inscription/".$project->id_project, "Postuler", "class"=>"btn")); ?>
+            <?php if(!$this->session->has('perm')){echo $this->tag->linkTo(array("member/inscription/".$project->id_project, "Postuler", "class"=>"btn")); }?>
         </td>
     </tr>
     <tr>
@@ -72,7 +72,13 @@
         </table>
     </p>
     <td align="right">
-            <?php echo $this->tag->linkTo(array("member/inscription/".$project->id_project, "Postuler", "class"=>"btn")); ?>
+          <?php if(!$this->session->has('perm')){echo $this->tag->linkTo(array("member/inscription/".$project->id_project, "Postuler", "class"=>"btn")); }?>
+		  <?php if($this->session->get('perm')==0){?>
+				<?php echo $this->tag->form(array("Member/invit", "autocomplete" => "off"))?>
+				 <?php echo $this->tag->textField(array("login", "size" => 20)) ?>
+				<?php echo $this->tag->submitButton(array("Inviter", "class" => "btn btn-primary btn-large")) ?>
+				</form>
+			<?php } ?>
         </td>
 </div>
 
